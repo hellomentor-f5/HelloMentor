@@ -10,4 +10,13 @@ public class HomeController {
     public String index() {
         return "login/login";
     }
+
+    @RequestMapping("/mypage")
+    public String myPage() {
+        return "mypage/mypage";
+    }
 }
+
+
+
+

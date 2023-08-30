@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Footer</title>
     <!-- header 스타일 -->
-    <link href="../../static/css/footer-style.css" rel="stylesheet" />
+    <link th:href="@{/css/footer-style.css}" rel="stylesheet" />
 
     <!-- jquery cdn -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -20,24 +20,24 @@
             <div class="footer-logo-container">
               <img
                 class="footer-logo-img"
-                src="../../static/img/HELLO_MENTOR_LOGO.png"
+                th:src="@{/img/HELLO_MENTOR_LOGO.png}"
                 onclick="location.href=''"
               />
             </div>
             <div class="social-bar">
               <img
                 id="insta-logo"
-                src="../../static/img/Instagram.png"
+                th:src="@{/img/Instagram.png}"
                 onclick="location.href=''"
               />
               <img
                 id="twitter-logo"
-                src="../../static/img/Twitter.png"
+                th:src="@{/img/Twitter.png}"
                 onclick="location.href=''"
               />
               <img
                 id="facebook-logo"
-                src="../../static/img/Facebook.png"
+                th:src="@{/img/Facebook.png}"
                 onclick="location.href=''"
               />
             </div>

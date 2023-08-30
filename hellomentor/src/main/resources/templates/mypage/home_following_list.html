@@ -8,17 +8,16 @@
 <body>
 <div class="my_right_title">팔로잉 목록</div>
 <div class="my_following_content1">
+
     <div th:each="i : ${#numbers.sequence(1, 12)}" class="my_following_box">
-    <div class="my_following_box">
         <div class="my_following_box_1">
             <div class="my_following_profile_img">
-    <img src="${pageContext.request.contextPath}/resources/img/profile-img.jpeg"/>
+    <img th:src="@{img/profile-img.jpeg}"/>
             </div>
         </div>
         <div class="my_following_box_2">
             <div class="my_following_profile_name">
                 imjaelin
-
                 <div class="my_following_favorite" onclick="toggleColor(this)">
                 ★
                 </div>
@@ -27,9 +26,8 @@
                 저는 잘 할 수 있습니다 <br>
                 제발 믿어주세요
             </div>
-        </div>
     </div>
-    </c:forEach>
+    </div>
 
 
 
@@ -65,7 +63,6 @@
 
 </script>
 
-<%--페이징처리 --%>
 <script>
     var currentPage = 1;
     var itemsPerPage = 8;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="mypage_left_menu" lang="en">
 
 
 <head>
@@ -13,11 +13,11 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
     <!-- bootstrap css -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"(
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css"/>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}"/>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css"/>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/my_left_menu.js"></script>
+    <script type="text/javascript" th:src="@{/js/my_left_menu.js}"></script>
     <script>
         function loadPage(pageName) {
             $.get(pageName, function(data) {
@@ -25,50 +25,45 @@
             });
         }
     </script>
+
+
 </head>
 <body>
 
 
-<div th:fragment="mypage_left_menu">
 
-<div class="my_left_container">
     <div class="my_left_content1">
         <div class="my_left_content1-1">홈</div>
-        <div class="my_left_content1-2" th:onclick="'loadPage(\'' + @{/home_notification} + '\')'">알림</div>
-        <div class="my_left_content1-3" th:onclick="'loadPage(\'' + @{/home_following_list} + '\')'">팔로잉 목록</div>
+        <div class="my_left_content1-2" onclick="loadPage('home_notification')">알림</div>
+        <div class="my_left_content1-3" onclick="loadPage('home_following_list')">팔로잉 목록</div>
     </div>
 
     <div class="my_left_content2">
         <div class="my_left_content2-1">프로필</div>
-        <div class="my_left_content2-2" th:onclick="'loadPage(\'' + @{/profile_edit_info} + '\')'">내정보수정</div>
-        <div class="my_left_content2-3" th:onclick="'loadPage(\'' + @{/profile_my_post} + '\')'">내가 쓴 글</div>
-        <div class="my_left_content2-4" th:onclick="'loadPage(\'' + @{/profile_my_reply} + '\')'">내가 쓴 댓글</div>
+        <div class="my_left_content2-2" onclick="loadPage('profile_edit_info')">내정보수정</div>
+        <div class="my_left_content2-3" onclick="loadPage('profile_my_post')">내가 쓴 글</div>
+        <div class="my_left_content2-4" onclick="loadPage('profile_my_reply')">내가 쓴 댓글</div>
     </div>
 
     <div class="my_left_content3">
         <div class="my_left_content3-1">개발도우미</div>
-        <div class="my_left_content3-3" th:onclick="'loadPage(\'' + @{/devhelper_calendar} + '\')'">캘린더</div>
-        <div class="my_left_content3-4" th:onclick="'loadPage(\'' + @{/devhelper_codelab} + '\')'">코드 실험실</div>
+        <div class="my_left_content3-3" onclick="loadPage('devhelper_calendar')">캘린더</div>
+        <div class="my_left_content3-4" onclick="loadPage('devhelper_codelab')">코드 실험실</div>
     </div>
 
     <div class="my_left_content4">
         <div class="my_left_content4-1">멘토링</div>
-        <div class="my_left_content4-2" th:onclick="'loadPage(\'' + @{/mentoring_mentor_applications} + '\')'">멘토 / 멘티 신청목록</div>
-        <div class="my_left_content4-3" th:onclick="'loadPage(\'' + @{/mentoring_mentor_registdetail} + '\')'">멘토 / 멘티 정보 등록 내역</div>
+        <div class="my_left_content4-2" onclick="loadPage('mentoring_mentor_applications')">멘토 / 멘티 신청목록</div>
+        <div class="my_left_content4-3" onclick="loadPage('mentoring_mentor_registdetail')">멘토 / 멘티 정보 등록 내역</div>
     </div>
 
     <div class="my_left_content5">
         <div class="my_left_content5-1">결제</div>
-        <div class="my_left_content5-2" th:onclick="'loadPage(\'' + @{/payment_payment_history} + '\')'">결제 내역</div>
-        <div class="my_left_content5-3" th:onclick="'loadPage(\'' + @{/payment_exchange_history} + '\')'">환전 내역</div>
+        <div class="my_left_content5-2" onclick="loadPage('payment_payment_history')">결제 내역</div>
+        <div class="my_left_content5-3" onclick="loadPage('payment_exchange_history')">환전 내역</div>
     </div>
-</div>
 
-</div>
 
 
 </body>
-</html>
-
-
 </html>

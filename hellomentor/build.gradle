@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.1'
+	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.6'
 }
 
 tasks.named('test') {

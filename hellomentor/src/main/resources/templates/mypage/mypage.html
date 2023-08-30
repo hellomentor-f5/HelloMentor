@@ -2,17 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <title>마이페이지</title>
+
 </head>
 <body>
 
-<div th:insert="header :: header"></div>
+<div th:insert="common/header :: header"></div>
+
 
 <div class="content">
     <div class="my_content">
 
-        <div th:insert="mypage_left_menu :: mypage_left_menu"></div>
+        <div class="my_left_container" th:insert="mypage/mypage_left_menu :: mypage_left_menu"></div>
 
         <div class="my_right_container">
             <div class="my_right_container2">
@@ -23,7 +24,7 @@
     </div>
 </div>
 
-<div th:insert="footer :: footer"></div>
+<div th:insert="common/footer :: footer"></div>
 
 </body>
 </html>

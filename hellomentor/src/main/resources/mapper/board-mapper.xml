@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="boardMapper">
+
+
+<resultMap id="boardResultMap" type="board">
+    <id column="POST_NO" property="postNo"/>
+    <result column="USER_WRITER_NO" property="userNo"/>
+    <result column="POST_TITLE" property="pTitle"/>
+    <result column="POST_CONTENT" property="pContent"/>
+    <result column="IS_DELETE" property="isDeleted"/>
+    <result column="VIEWS" property="views"/>
+    <result column="CREATE_DATE" property="createDate"/>
+    <result column="BOARD_TYPE" property="boardType"/>
+</resultMap>
+
+<select id="getMyPost" resultMap="boardResultMap" parameterType="int">
+    SELECT POST_NO, USER_WRITER_NO, POST_TITLE, POST_CONTENT, IS_DELETE, VIEWS, CREATE_DATE, BOARD_TYPE
+    FROM BOARD
+    WHERE USER_WRITER_NO = #{userNo}
+</select>
+
+</mapper>
