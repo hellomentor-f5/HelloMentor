@@ -15,20 +15,13 @@ public class HomeController {
     public String myPage() {
         return "mypage/mypage";
     }
-    @RequestMapping("/choose-sign-up")
-    public String chooseSignUp() {
-        return "login/choose-sign-up";
-    }
-    @RequestMapping("/sign-up")
-    public String signUp() {
-        return "login/sign-up";
-    }
-    
     @RequestMapping("/main")
     public String main() {
         return "common/main";
-
     }
+    
+   
+    
 }
 
 
