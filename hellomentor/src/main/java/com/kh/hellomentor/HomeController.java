@@ -23,6 +23,12 @@ public class HomeController {
     public String signUp() {
         return "login/sign-up";
     }
+    
+    @RequestMapping("/main")
+    public String main() {
+        return "common/main";
+
+    }
 }
 
 
