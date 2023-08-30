@@ -20,7 +20,6 @@ public class Member {
     private String email;
     private Date enrollDate;
     private String status;
-    private String gender;
     private String introduction;
     private String memberType;
     private int token;

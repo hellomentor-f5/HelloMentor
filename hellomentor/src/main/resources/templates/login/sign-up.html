@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HelloMentor-회원가입</title>
 
-    <link href="../../static/css/sign-up-style.css" rel="stylesheet" />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+     <link th:href="@{/css/sign-up-style.css}" rel="stylesheet" />
+     <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css}" 
+     rel="stylesheet" />
+     
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   </head>
   <body>
     <div class="content">
       <div class="logo-container" onclick="location.href=''">
-        <img src="../../static/img/HELLO_MENTOR_LOGO.png" />
+         <img th:src="@{/img/HELLO_MENTOR_LOGO.png}" />
       </div>
 
       <div class="sign-upMain">
@@ -25,11 +23,14 @@
         <div id="sign-upTitle">멘티 가입하기</div>
         <!-- 멘토 선택시 -->
         <!-- <div id="sign-upTitle">멘토 가입하기</div> -->
-        <form id="sign-upForm" action="sign_up" method="post">
+        
+        <form action="/sign.up" method="post" th:action="@{/sign.up}">
           <div id="sign-up">
             <div>
+           <!-- <p th:text="${param.mValue}"></p> -->
               <span>아이디</span>
               <br />
+               <input type="hidden" name="memberType" th:value="${param.mValue}">
               <input
                 type="text"
                 name="userId"
@@ -125,12 +126,20 @@
               ></textarea>
             </div>
           </div>
+          <button type="submit" id="sign-upBtn">가입</button>
           <br />
         </form>
         <div>
-          <button type="submit" form="sign-upForm" id="sign-upBtn">가입</button>
         </div>
       </div>
     </div>
+    <script th:inline="javascript">
+        var message = /*[[${message}]]*/ '';
+
+        // 메시지를 사용하여 alert를 생성합니다.
+        if (message) {
+            alert(message);
+        }
+    </script>
   </body>
 </html>

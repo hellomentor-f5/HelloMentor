@@ -10,11 +10,4 @@ import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    @Autowired
-    private BoardDao boardDao;
-
-    @Override
-    public List<Board> getPostsByUserNo(int userNo) {
-        return boardDao.getPostsByUserNo(userNo);
-    }
 }

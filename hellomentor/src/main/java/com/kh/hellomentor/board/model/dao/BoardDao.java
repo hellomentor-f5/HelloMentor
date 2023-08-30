@@ -12,12 +12,4 @@ import java.util.List;
 
 @Repository
 public class BoardDao {
-    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-
-    @Autowired
-    private SqlSessionTemplate session;
-
-    public List<Board> getPostsByUserNo(int userNo) {
-        return session.selectList("boardMapper.getMyPost", userNo);
-    }
 }
