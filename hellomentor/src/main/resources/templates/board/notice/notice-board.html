@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>공지사항_메인페이지</title>
-    <link th:href="@{/css/notice-style.css}" rel="stylesheet" />
-    <link th:href="@{/css/cs-menu.css}" rel="stylesheet" />
-    <link th:href="@{/css/normal-frame.css}" rel="stylesheet" />
+    <link href="../resources/css/normal-frame.css" rel="stylesheet" />
+    <link href="../resources/css/cs-menu.css" rel="stylesheet" />
+    <link href="../resources/css/notice-board.css" rel="stylesheet" />
 
     <link
       rel="stylesheet"
@@ -17,9 +17,6 @@
   </head>
 
   <body>
-  
-  <div th:insert="common/header :: header"></div>
-  
     <div class="content">
       <div class="section">
         <div class="title">공지사항</div>
@@ -59,7 +56,6 @@
                   d="M34.8017 32.1983L26.735 24.15C28.7487 21.5892 29.8402 18.4244 29.8333 15.1667C29.8333 12.2659 28.9732 9.43023 27.3616 7.01831C25.75 4.60639 23.4593 2.72653 20.7794 1.61644C18.0994 0.506355 15.1504 0.215906 12.3053 0.781822C9.46029 1.34774 6.84694 2.7446 4.79577 4.79577C2.7446 6.84694 1.34774 9.46029 0.781822 12.3053C0.215906 15.1504 0.506355 18.0994 1.61644 20.7794C2.72653 23.4593 4.60639 25.75 7.01831 27.3616C9.43023 28.9732 12.2659 29.8333 15.1667 29.8333C18.4244 29.8402 21.5892 28.7487 24.15 26.735L32.1983 34.8017C32.5436 35.1469 33.0118 35.3408 33.5 35.3408C33.9882 35.3408 34.4564 35.1469 34.8017 34.8017C35.1469 34.4564 35.3408 33.9882 35.3408 33.5C35.3408 33.0118 35.1469 32.5436 34.8017 32.1983ZM7.39334 23.0317C5.57256 21.2512 4.42597 18.8941 4.14919 16.3625C3.8724 13.831 4.48257 11.2818 5.8756 9.14994C7.26862 7.01807 9.35819 5.43558 11.7878 4.67247C14.2174 3.90935 16.8365 4.01288 19.1983 4.9654C21.5601 5.91791 23.5183 7.6604 24.7387 9.89558C25.9591 12.1308 26.3661 14.7201 25.8904 17.2219C25.4146 19.7237 24.0856 21.983 22.1299 23.6142C20.1743 25.2454 17.7132 26.1475 15.1667 26.1667C12.2503 26.1641 9.45426 25.0035 7.39334 22.94V23.0317Z"
                   fill="#222221"
                 />
-                
               </svg>
             </button>
           </div>
@@ -76,59 +72,54 @@
             </tr>
           </thead>
           <tbody>
-            <th:block th:if="${empty list}">
-                <tr>
-                    <td colspan="3">공지사항이 존재하지 않습니다</td>
-                </tr>
-            </th:block>
-		 	<c:forEach var="n" items="${list}">
-                   <tr>
-                       <td th:text="${n.boardType}"></td>
-                       <td th:text="${n.postTitle}"></td>
-                       <td th:text="${n.createDate}"></td>
-                   </tr>
-               </c:forEach>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
+            <tr onclick="location.href=''">
+              <td>점검</td>
+              <td>서버 점검 안내</td>
+              <td>23.08.12</td>
+            </tr>
           </tbody>
         </table>
         <!-- 게시글 끝 -->
-        
-        
-        
-        
-        <!-- 관리자만 글 작성 가능 -->
-		<th:block th:if="${loginUser.userId}">
-              <div id="move-to-insert"><a th:href="${contextPath}/board/insert/${boardCode}">글 작성</a></div>
-          </th:block>
-		
-		
-		
+
+        <div id="move-to-insert"><a href="#">글 작성</a></div>
 
         <!--페이징바-->
         <div align="center" class="paging-area">
-        <ul class="pagination">
-			 <th:block th:choose>
-                 <th:block th:when="${pi.currentPage eq 1}">
-                     <li class="page-item disabled"><a class="page-link" href="#">이전 페이지</a></li>
-                 </th:block>
-                 <th:block th:otherwise>
-                     <li class="page-item"><a class="page-link" th:href="${url}${pi.currentPage - 1}">이전 페이지</a></li>
-                 </th:block>
-             </th:choose>
-
-             <c:forEach var="item" begin="${pi.startPage}" end="${pi.endPage}">
-                 <li class="page-item">
-                     <a class="page-link" th:href="${url}${item}" th:text="${item}"></a>
-                 </li>
-             </c:forEach>
-
-             <th:block th:choose>
-                 <th:block th:when="${pi.currentPage eq pi.maxPage}">
-                     <li class="page-item disabled"><a class="page-link" href="#">다음 페이지</a></li>
-                 </th:block>
-                 <th:block th:otherwise>
-                     <li class="page-item"><a class="page-link" th:href="${url}${pi.currentPage + 1}">다음 페이지</a></li>
-                 </th:block>
-             </th:choose>
+          <button onclick="location.href= '#' ">이전 페이지</button>
+          <button onclick="location.href='#'">1</button>
+          <button onclick="location.href='#'">2</button>
+          <button onclick="location.href='#'">3</button>
+          <button onclick="location.href = '#'">다음 페이지</button>
         </div>
       </div>
     </div>
@@ -144,7 +135,5 @@
         });
       });
     </script>
-    
-    <div th:insert="common/footer :: footer"></div>
   </body>
 </html>

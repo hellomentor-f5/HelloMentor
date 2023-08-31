@@ -7,46 +7,17 @@
     <id column="POST_NO" property="postNo"/>
     <result column="USER_WRITER_NO" property="userNo"/>
     <result column="POST_TITLE" property="pTitle"/>
+    <result column="POST_CONTENT" property="pContent"/>
+    <result column="IS_DELETE" property="isDeleted"/>
+    <result column="VIEWS" property="views"/>
+    <result column="CREATE_DATE" property="createDate"/>
     <result column="BOARD_TYPE" property="boardType"/>
 </resultMap>
 
 <select id="getMyPost" resultMap="boardResultMap" parameterType="int">
-    SELECT POST_NO,
-           USER_WRITER_NO,
-           POST_TITLE,
-           BOARD_TYPE
+    SELECT POST_NO, USER_WRITER_NO, POST_TITLE, POST_CONTENT, IS_DELETE, VIEWS, CREATE_DATE, BOARD_TYPE
     FROM BOARD
     WHERE USER_WRITER_NO = #{userNo}
 </select>
-
-    <resultMap id="replyResultMap" type="reply">
-        <id column="REPLY_ID" property="replyId"/>
-        <result column="POST_NO" property="postNo"/>
-        <result column="USER_NO" property="userNo"/>
-        <result column="REPLY_CONTENT" property="rContent"/>
-        <result column="CREATE_AT" property="createDate"/>
-        <association property="boardType" javaType="String">
-            <result column="BOARD_TYPE" property="boardType"/>
-        </association>
-    </resultMap>
-
-
-
-    <select id="getMyReply" resultMap="replyResultMap" parameterType="int">
-        SELECT
-            r.REPLY_ID,
-            r.POST_NO,
-            r.USER_NO,
-            r.REPLY_CONTENT,
-            r.CREATE_AT,
-            b.BOARD_TYPE
-        FROM
-            REPLY r
-                JOIN
-            BOARD b ON r.POST_NO = b.POST_NO
-        WHERE
-            r.USER_NO = #{userNo}
-    </select>
-
 
 </mapper>

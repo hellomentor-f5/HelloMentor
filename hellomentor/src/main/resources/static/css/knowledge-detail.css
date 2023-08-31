@@ -11,7 +11,7 @@
     text-align: left;
     color: #48917A;
     font-size: 40px;
-    font-family: "bd";
+    font-weight: 600;
     height: 80px;
 }
 
@@ -111,7 +111,7 @@
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -173,7 +173,7 @@
     border-radius: 10px;
     border: none;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: "bd";
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -201,12 +201,12 @@
 #answer-logo {
     color: #48917A;
     font-size: 40px;
-    font-family: "bd";
+    font-weight: 600;
 }
 
 #answer-quantity {
     font-size: 25px;
-    font-family: "bd";
+    font-weight: bold;
     margin-left: 10px;
 }
 
@@ -286,7 +286,7 @@
     border: 0px solid;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 .insert-correct:hover {

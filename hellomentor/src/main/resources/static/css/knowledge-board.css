@@ -138,7 +138,7 @@
 #knowledge-area tbody td:nth-child(4) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    font-family: "bd";
+    font-weight: bold;
 }
 
 #knowledge-area tbody tr {
@@ -191,7 +191,7 @@
     text-decoration: none;
     color: black;
     font-size: 18px;
-    font-family: "bd";
+    font-weight: bold;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 
 }
@@ -216,6 +216,8 @@
     cursor: pointer;
     border-radius: 8px;
     border: 1px solid rgb(226, 219, 219);
+    font-weight: 500;
+
 }
 
 .paging-area button.active {

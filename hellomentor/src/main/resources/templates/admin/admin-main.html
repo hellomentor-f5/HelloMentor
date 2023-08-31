@@ -29,7 +29,7 @@
                     <div class="dash-box" onclick="location.href=''">
                         <div class="dash-subtitle">회원수</div>
                         <div class="dash-count">
-                        143명
+                           <p><span th:text="${aTotal}+'명'"></span></p>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     <div class="dash-box"  onclick="location.href=''">
                         <div class="dash-subtitle">문의건수</div>
                         <div class="dash-count">
-                        12건
+                         <p><span th:text="${iTotal}+'개'"></span></p>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                     <div class="dash-box" onclick="location.href=''">
                         <div class="dash-subtitle">신고건수</div>
                         <div class="dash-count">
-                        32건
+                         <p><span th:text="${rTotal}+'개'"></span></p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                     <div class="dash-box" onclick="location.href=''">
                         <div class="dash-subtitle">접수된 스터디</div>
                         <div class="dash-count">
-                        13개
+                         <p><span th:text="${sTotal}+'개'"></span></p>
                         </div>
                     </div>
                 </div>

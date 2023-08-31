@@ -34,7 +34,7 @@ public class MemberController {
         	 if(loginUser.getUserId().equals("admin")){
         		 session.setAttribute("loginUser", loginUser);
         		 model.addAttribute("message","관리자로 로그인했습니다.");
-                 url = "admin/admin-main";
+                 url = "redirect:/admin/selectList";
         	 }else {
         		 session.setAttribute("loginUser", loginUser);
         		 model.addAttribute("message", loginUser.getUserName()+"님 반갑습니다");

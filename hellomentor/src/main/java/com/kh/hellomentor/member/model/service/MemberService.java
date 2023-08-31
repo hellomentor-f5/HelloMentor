@@ -6,5 +6,5 @@ public interface MemberService {
 
    Member loginUser(Member m);
 
-   int insertMember(Member m);
+      int insertMember(Member m);
 }

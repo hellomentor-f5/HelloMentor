@@ -14,5 +14,5 @@ public class Inquiry {
     private int postNo;
     private int categoryId;
     private boolean isProcessed;
-    private String answer;
+    private String iqAnswer;
 }

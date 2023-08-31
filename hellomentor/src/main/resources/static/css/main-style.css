@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Pretendard Variable;
     box-sizing: border-box;
 }
 
@@ -61,12 +62,12 @@
     height: 40px;
     margin-left: 20px;
     font-size: 40px;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 .best-hot {
     font-size: 15px;
-    font-family: "bd";
+    font-weight: 700;
     color: red;
     transform: rotate(26.714deg);
     position: absolute;

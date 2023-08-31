@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="adminMapper">
+
+	<resultMap id="memberResultSet" type="member">
+   <id column="USER_NO" property="userNo"/>
+   <result column="USER_ID" property='userId'/>
+   <result column="USER_PWD" property="userPwd"/>
+   <result column="USER_NAME" property="userName"/>
+   <result column="PHONE" property="phone"/>
+   <result column="EMAIL" property="email"/>
+   <result column="ENROLL_DATE" property="enrollDate"/>
+   <result column="STATUS" property="status"/>
+   <result column="INTRODUTION" property="introduction"/>
+   <result column="MEMBER_TYPE" property="memberType"/>
+   <result column="TOKEN" property="token"/>
+   <result column="GRADE" property="grade"/>
+</resultMap> 
+	
+	<resultMap id="studyResultSet" type="study">
+		<id column="POST_NO" property="postNo"/>
+		<result column="START_DATE" property="startDate" />
+		<result column="PEOPLE" property="people"/>
+	</resultMap>
+	
+	<resultMap id="reportResultSet" type="report">
+		<id column="POST_NO" property="postNo"/>
+		<result column="CATEGORY_ID" property="categoryId" />
+		<result column="USER_NO" property="userNo" />
+		<result column="POST_ID" property="postId" />
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<resultMap id="inquiryResultSet" type="inquiry">
+		<id column="POST_NO" property="postNo"/>
+		<result column="CATEGORY_ID" property="categoryId" />
+		<result column="IS_PROCESSED" property="isProcessed" />
+		<result column="IQ_ANSWER" property="iqAnswer" />
+	</resultMap>
+	
+	<select id="selectMList" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+	</select>
+	
+	<select id="selectSList" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM STUDY
+	</select>
+	
+	<select id="selectRList" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM REPORT_BOARD
+	</select>
+	
+	<select id="selectIList" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM INQUIRY_BOARD
+	</select>
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+</mapper>

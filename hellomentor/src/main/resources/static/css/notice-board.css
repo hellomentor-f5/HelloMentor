@@ -70,7 +70,7 @@
 }
 
 #notice-area tbody td:nth-child(2) {
-    font-family: "bd";
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -127,7 +127,7 @@
     text-decoration: none;
     color: black;
     font-size: 18px;
-    font-family: "bd";
+    font-weight: bold;
 }
 
 #move-to-insert a:hover {
@@ -151,6 +151,8 @@
     cursor: pointer;
     border-radius: 8px;
     border: 1px solid rgb(226, 219, 219);
+    font-weight: 500;
+
 }
 
 .paging-area button.active {

@@ -19,5 +19,4 @@ public class Reply {
     private String rContent;
     private String isDeleted;
     private Date createDate;
-    private String boardType;
 }

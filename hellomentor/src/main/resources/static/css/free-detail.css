@@ -1,3 +1,32 @@
+/* 게시글 정보 테이블 시작 */
+#free-table {
+    font-size: 17px;
+
+    text-align: left;
+    margin: 80px 0px 40px 173px
+}
+
+.free-title {
+    width: 840px;
+}
+
+#free-table thead tr th {
+    padding: 5px;
+}
+
+#free-table tbody tr td {
+    padding-left: 5px;
+}
+
+.seeimg {
+    padding: 0px;
+    width: 26px;
+    height: 26px;
+    transform: translate(10px, 3px);
+}
+
+/* 게시글 정보 테이블 끝 */
+
 
 
 /* 게시글 정보 테이블 시작 */
@@ -16,7 +45,6 @@
 }
 
 .free-title {
-    width: 840px;
     font-size: 20px;
     font-family: "bd";
 }
@@ -91,7 +119,7 @@
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -179,7 +207,7 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
     background-color: #40E0D0;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 #reply-send:hover {

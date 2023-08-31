@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Pretendard Variable;
     box-sizing: border-box;
 }
 
@@ -32,7 +33,7 @@
 
 #report-title {
     font-size: 40px;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 .report-form {
@@ -48,7 +49,7 @@
 
 #report-form span {
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
     line-height: 32px;
     margin-right: 20px;
 }
@@ -119,7 +120,7 @@
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
     cursor: pointer;
 }
 

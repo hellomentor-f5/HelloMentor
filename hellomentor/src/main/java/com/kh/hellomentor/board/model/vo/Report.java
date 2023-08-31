@@ -14,6 +14,6 @@ public class Report {
     private int postNo;
     private int categoryId;
     private int userNo;
-    private int targetPostNo;
+    private int postId;
     private String status;
 }

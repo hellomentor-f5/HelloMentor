@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Pretendard Variable;
     box-sizing: border-box;
 }
 
@@ -28,7 +29,7 @@
     width: 800px;
     margin-top: 100px;
     font-size: 40px;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 
@@ -56,7 +57,7 @@
 
 .info-enroll-section>span {
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
     margin-bottom: 8px;
 }
 
@@ -93,7 +94,7 @@
     margin-right: 10px;
     margin-left: 10px;
     font-size: 20px;
-    font-family: "bd";
+    font-weight: 700;
 }
 
 .ie-btns:hover {
