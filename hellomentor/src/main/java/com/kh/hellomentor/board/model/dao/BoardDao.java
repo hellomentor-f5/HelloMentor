@@ -3,6 +3,7 @@ package com.kh.hellomentor.board.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.hellomentor.board.model.vo.*;
 import com.kh.hellomentor.matching.model.vo.StudyApplicant;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -11,13 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.hellomentor.board.model.vo.Attachment;
-import com.kh.hellomentor.board.model.vo.Board;
-import com.kh.hellomentor.board.model.vo.BoardType;
-import com.kh.hellomentor.board.model.vo.Free;
-import com.kh.hellomentor.board.model.vo.Inquiry;
-import com.kh.hellomentor.board.model.vo.Reply;
 import com.kh.hellomentor.member.controller.MemberController;
+
+import javax.transaction.Transactional;
 
 @Repository
 public class BoardDao {
@@ -98,6 +95,8 @@ public class BoardDao {
 
 
 
+
+
     //정승훈 구역
     public List<Board> selectStudyList(int currentPage, Map<String, Object> paramMap) {
         int offset = (currentPage - 1) * 5; //몇개의 페이지를 나타낼건지를 나타냄
@@ -131,11 +130,42 @@ public class BoardDao {
         return session.selectOne("boardMapper.studyDetailApplicant",postNo);
     }
 
+
+
+    public int insertBoardAndStudy(Map<String, Object> boardData) {
+        int result = 0;
+
+        Board b = (Board) boardData.get("board");
+        Study s = (Study) boardData.get("study");
+
+
+        result = session.insert("boardMapper.insertBoard",b);
+
+        if(result > 0) {
+            result = session.insert("boardMapper.insertStudy", s);
+        }
+    return result;
+
+    }
+
+
+    //-------------------------2023-09-09 정승훈 작업---------------------------
+    public int insertReply(Reply r) {
+        return session.insert("boardMapper.insertReply",r);
+    }
     public List<Reply> selectReplyList(int postNo) {
         return session.selectList("boardMapper.selectReplyList",postNo);
     }
 
+    //모집인원
+    public List<Study> selectStudyList(Study study) {
+        return session.selectList("boardMapper.selectStudyList1",study);
+    }
 
+    //스터디 작성자 설정한 인원수
+    public int selectStudypeople(int postNo) {
+        return session.selectOne("boardMapper.selectStudypeople",postNo);
+    }
 
 
     //------------------------------정승훈-----------------------------------------

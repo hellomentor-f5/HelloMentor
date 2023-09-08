@@ -14,6 +14,5 @@ import java.sql.Date;
 @Builder
 public class Study {
     private int postNo;
-    private Date startDate;
     private int people;
 }

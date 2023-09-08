@@ -3,11 +3,7 @@ package com.kh.hellomentor.board.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.kh.hellomentor.board.model.vo.Attachment;
-import com.kh.hellomentor.board.model.vo.Board;
-import com.kh.hellomentor.board.model.vo.Free;
-import com.kh.hellomentor.board.model.vo.Inquiry;
-import com.kh.hellomentor.board.model.vo.Reply;
+import com.kh.hellomentor.board.model.vo.*;
 import com.kh.hellomentor.matching.model.vo.StudyApplicant;
 
 public interface BoardService {
@@ -49,13 +45,19 @@ public interface BoardService {
 
     List<Map<String, Object>> selectRecruitmentCount(Map<String, Object> paramMap);
 
-    int insertStudy(Board b);
-
     Board selectDetailStudy(int postNo);
 
     int studyDetailApplicant(int postNo);
 
     List<Reply> selectReplyList(int postNo);
 
+    int insertBoardAndStudy(Map<String, Object> boardData);
 
+
+    //-------------------------2023-09-09 정승훈 작업---------------------------
+    int insertReply(Reply r);
+
+    List<Study> selectStudyList(Study study);
+
+    int selectStudypeople(int postNo);
 }

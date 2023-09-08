@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.kh.hellomentor.board.model.vo.*;
 import com.kh.hellomentor.matching.model.vo.StudyApplicant;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -20,11 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.hellomentor.board.model.service.BoardService;
-import com.kh.hellomentor.board.model.vo.Attachment;
-import com.kh.hellomentor.board.model.vo.Board;
-import com.kh.hellomentor.board.model.vo.Free;
-import com.kh.hellomentor.board.model.vo.Inquiry;
-import com.kh.hellomentor.board.model.vo.Reply;
 import com.kh.hellomentor.common.Utils;
 import com.kh.hellomentor.common.template.Pagination;
 import com.kh.hellomentor.common.vo.PageInfo;
@@ -278,11 +274,28 @@ public class BoardController {
             Model model,
             @RequestParam Map<String, Object> paramMap,
             Board board,
+            Study study,
             HttpServletRequest request
     ) {
 
+        //2023-09-08 정승훈 수정
 
+        // Study 데이터 조회
+        List<Study> peopleList = boardService.selectStudyList(new Study());
+
+        // Board 데이터 조회
         List<Board> list = boardService.selectStudyList(currentPage, paramMap);
+
+        // Study와 Board 데이터를 연관시켜 Map에 저장
+        Map<Integer, Integer> postRecruitmentCountMap1 = new HashMap<>();
+        for (Board boardItem : list) {
+            for (Study studyItem : peopleList) {
+                if (boardItem.getPostNo() == studyItem.getPostNo()) {
+                    postRecruitmentCountMap1.put(boardItem.getPostNo(), studyItem.getPeople());
+                    break; // 해당하는 Study를 찾았으면 루프 종료
+                }
+            }
+        }
 
 
         // 각 게시물의 POST_NO 목록을 가져옵니다.
@@ -312,8 +325,10 @@ public class BoardController {
         // 컨트롤러 모델에 POST_NO별 RECRUITMENT_COUNT를 추가
         model.addAttribute("postRecruitmentCountMap", postRecruitmentCountMap);
 
+        model.addAttribute("postRecruitmentCountMap1", postRecruitmentCountMap1);
 
 
+        log.info("postRecruitmentCountMap1 {}",postRecruitmentCountMap1);
 
         log.info("list {}",list);
 
@@ -323,7 +338,7 @@ public class BoardController {
 
         model.addAttribute("param", paramMap); //보드타입
         model.addAttribute("list", list); //study에 대한 정보가 담김
-
+        model.addAttribute("peopleList",peopleList);
 
 
         return "/board/study/studyList";
@@ -345,24 +360,33 @@ public class BoardController {
     public String insertStudy(
             HttpSession session,
             Model model,
-            Board b,
+            Board board,
+            Study study,
             RedirectAttributes redirectAttributes
     ) {
         Member loginUser = (Member) session.getAttribute("loginUser");
-        b.setUserNo(loginUser.getUserNo()+""); //작성자의 번호도 넣어주기
+        board.setUserNo(loginUser.getUserNo()+""); //작성자의 번호도 넣어주기
 
+
+        Map<String, Object> boardData = new HashMap<>();
+        boardData.put("board", board); // Board 객체를 Map에 추가
+        boardData.put("study", study); // People 값을 Map에 추가
 
 
         int result = 0;
 
 
-        result = boardService.insertStudy(b);
+        result = boardService.insertBoardAndStudy(boardData);
 
 
 
-        log.info("POST_TITLE{}",b.getPostTitle());
-        log.info("POST_CONTENT{}",b.getPostContent());
-        log.info("result{}",result);
+        model.addAttribute("boardData", boardData); //보드타입
+
+
+
+        log.info("POST_TITLE{}",board.getPostTitle());
+        log.info("POST_CONTENT{}",board.getPostContent());
+        log.info("result {}" , result);
 
         if(result > 0) {
             redirectAttributes.addFlashAttribute("message", "스터디 등록이 완료되었습니다");
@@ -392,11 +416,17 @@ public class BoardController {
         //게시글에있는 정보들 조회 (제목,작성자,작성날짜,조회수)
         Board dstudy = boardService.selectDetailStudy(postNo);
 
+
+
         //신청자 인원수 조회
         int studyDetailApplicant = boardService.studyDetailApplicant(postNo);
 
 
-        //댓글리스트 조회
+        //스터디 작성자가 설정한 인원수 가져오기 2023-09-08
+        int boardstudypeple = boardService.selectStudypeople(postNo);
+
+
+//        //댓글리스트 조회
         List<Reply> replyList = boardService.selectReplyList(postNo);
 
         String url = "";
@@ -404,14 +434,18 @@ public class BoardController {
         log.info("postNo{}",postNo);
         log.info("dstudy {}",dstudy);
         log.info("loginUser {}",loginUser);
-        log.info("studyDetailApplicant {}",studyDetailApplicant);
-        log.info("replyList {}",replyList);
+        log.info("boardstudypeple {}",boardstudypeple);
 
 
+
+
+
+        model.addAttribute("replyList",replyList);
         model.addAttribute("loginUser",loginUser);
         model.addAttribute("dstudy",dstudy);
         model.addAttribute("studyDetailApplicant",studyDetailApplicant);
-        model.addAttribute("replyList",replyList);
+        model.addAttribute("boardstudypeple",boardstudypeple);
+
 
         url="board/study/updateStudy";
 
@@ -421,6 +455,32 @@ public class BoardController {
 
 
     }
+
+    //------------------------- 정승훈 작업---------------------------
+
+    @PutMapping("/study/insertReply")
+    @ResponseBody
+    public int insertReply(Reply r, HttpSession session){
+
+        Member m = (Member) session.getAttribute("loginUser");
+
+        if(m != null){
+            r.setUserNo(m.getUserNo()+"");
+        }
+        int result = boardService.insertReply(r);
+
+        return result;
+    }
+
+    @GetMapping("/study/selectReplyList")
+    @ResponseBody
+    public List<Reply> selectReplyList(int postNo,Model model){
+        return boardService.selectReplyList(postNo);
+    }
+
+
+
+
 
 
 

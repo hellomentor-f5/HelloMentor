@@ -328,17 +328,14 @@
 
 
 
-    <insert id="insertStudy" parameterType="board">
-        INSERT INTO BOARD (USER_WRITER_NO,POST_TITLE,POST_CONTENT,IS_DELETE,VIEWS,CREATE_DATE,BOARD_TYPE)
-        VALUES(
-        #{userNo},
-        #{postTitle},
-        #{postContent},
-        0,
-        0,
-        CURRENT_DATE,
-        'S'
-        )
+    <insert id="insertBoard" parameterType="com.kh.hellomentor.board.model.vo.Board">
+        INSERT INTO BOARD (USER_WRITER_NO, POST_TITLE, POST_CONTENT,BOARD_TYPE)
+        VALUES (#{userNo}, #{postTitle}, #{postContent},'S')
+    </insert>
+
+    <insert id="insertStudy" parameterType="com.kh.hellomentor.board.model.vo.Study">
+        INSERT INTO STUDY (POST_NO, PEOPLE)
+        SELECT last_insert_id(), #{people} FROM DUAL
     </insert>
 
 
@@ -367,10 +364,53 @@
     </resultMap>
 
 
+
+
+
+
+    <!-- 2023-09-08 정승훈 작업 -->
     <select id="selectReplyList" resultMap="replyResultMap1" parameterType="int">
         SELECT REPLY_ID,POST_NO,USER_ID USER_NO,REPLY_CONTENT,CREATE_AT
         FROM REPLY R
         JOIN MEMBER M ON R.USER_NO = M.USER_NO
+        WHERE POST_NO = ${postNo}
+    </select>
+
+
+
+
+    <insert id="insertReply" parameterType="reply">
+        INSERT INTO REPLY (
+        POST_NO,
+        USER_NO,
+        REPLY_CONTENT,
+        IS_DELETE,
+        CREATE_AT
+        )VALUES(
+         #{postNo},
+         #{userNo},
+         #{replyContent},
+         0,
+        '2023-09-07'
+        )
+    </insert>
+
+
+
+
+    <resultMap id="studyResultMap" type="study">
+        <id column="POST_NO" property="postNo"/>
+        <result column="PEOPLE" property="people"/>
+
+
+    </resultMap>
+
+    <select id="selectStudyList1" resultMap="studyResultMap" parameterType="study">
+        SELECT * FROM STUDY
+    </select>
+
+    <select id="selectStudypeople"  resultType="int" parameterType="int">
+        SELECT PEOPLE AS people FROM STUDY
         WHERE POST_NO = ${postNo}
     </select>
 

@@ -62,7 +62,7 @@
 
     <th:block th:each="study : ${list}">
       <div class="study-list" th:attr="onclick='movePage(\'' + ${study.postNo} + '\');'">
-        <div class="group" >
+        <div class="group">
           <div class="so-group1">
             <div class="study-title" th:text="${study.postTitle}"></div>
             <div class="lines" th:text="${study.postNo}"></div>
@@ -71,16 +71,32 @@
             <div th:text="${study.userNo}"></div>
           </div>
           <div class="so-group2">
-            <div class="recruitment">모집중</div>
-            <div>모집인원(<span th:text="${postRecruitmentCountMap[study.postNo]}"></span>/5)</div>
-            <div th:text="${study.createDate}"></div>
+            <th:block th:if="${postRecruitmentCountMap[study.postNo] != postRecruitmentCountMap1[study.postNo]}">
+              <div class="recruitment">모집중</div>
+            </th:block>
+            <th:block th:if="${postRecruitmentCountMap[study.postNo] == postRecruitmentCountMap1[study.postNo]}">
+              <div class="completed" th:style="'color: red; font-family: bd'">모집완료</div>
+            </th:block>
+
+            <div>
+              모집인원(<span th:text="${postRecruitmentCountMap[study.postNo]}"></span>/
+              <span th:text="${postRecruitmentCountMap1[study.postNo]}"></span>)
+            </div>
           </div>
         </div>
       </div>
     </th:block>
 
+
+
+
+
+
+
+
+
     <div class="write-btn">
-      <button class="study-insert" >글 작성</button>
+      <button class="study-insert" onclick="location.href='/hellomentor/study/insert'" >글 작성</button>
     </div>
 
     <div align="center" class="paging-area">

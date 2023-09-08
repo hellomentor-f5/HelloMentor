@@ -3,16 +3,12 @@ package com.kh.hellomentor.board.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.kh.hellomentor.board.model.vo.Attachment;
+import com.kh.hellomentor.board.model.vo.*;
 import com.kh.hellomentor.matching.model.vo.StudyApplicant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.hellomentor.board.model.dao.BoardDao;
-import com.kh.hellomentor.board.model.vo.Board;
-import com.kh.hellomentor.board.model.vo.Free;
-import com.kh.hellomentor.board.model.vo.Inquiry;
-import com.kh.hellomentor.board.model.vo.Reply;
 import com.kh.hellomentor.common.Utils;
 
 @Service
@@ -123,10 +119,7 @@ public class BoardServiceImpl implements BoardService {
 
 
     //스터디 게시글 등록
-    @Override
-    public int insertStudy(Board b) {
-        return boardDao.insertStudy(b);
-    }
+
 
     @Override
     public Board selectDetailStudy(int postNo) {
@@ -141,6 +134,28 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<Reply> selectReplyList(int postNo) {
         return boardDao.selectReplyList(postNo);
+    }
+
+    @Override
+    public int insertBoardAndStudy(Map<String, Object> boardData) {
+        return boardDao.insertBoardAndStudy(boardData);
+    }
+
+
+    //-------------------------2023-09-09 정승훈 작업---------------------------
+    @Override
+    public int insertReply(Reply r) {
+        return boardDao.insertReply(r);
+    }
+
+    @Override
+    public List<Study> selectStudyList(Study study) {
+        return boardDao.selectStudyList(study);
+    }
+
+    @Override
+    public int selectStudypeople(int postNo) {
+        return boardDao.selectStudypeople(postNo);
     }
 
 
