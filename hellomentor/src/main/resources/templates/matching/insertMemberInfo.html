@@ -42,12 +42,12 @@
         </div>
 
         <select id="code-lang" name="codeLang">
-          <option value="C언어">C언어</option>
-          <option value="JAVA">JAVA</option>
-          <option value="C++">C++</option>
-          <option value="React">React</option>
-          <option value="Python">Python</option>
-          <option value="JacaScript">JavaScript</option>
+          <option value="c">C언어</option>
+          <option value="java">JAVA</option>
+          <option value="c++">C++</option>
+          <option value="react">React</option>
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
         </select>
 
         <th:block th:if="${loginUser.memberType == 'O'}">
@@ -116,16 +116,5 @@
         });
       });
     </script>
-
-
-<script th:inline="javascript">
-    // 컨트롤러에서 전달된 메시지를 받아옵니다.
-    var message = /*[[${message}]]*/ '';
-
-    // 메시지를 사용하여 alert를 생성합니다.
-    if (message) {
-        alert(message);
-    }
-</script>
 </body>
 </html>

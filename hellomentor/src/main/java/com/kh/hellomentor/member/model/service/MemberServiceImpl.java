@@ -8,7 +8,6 @@ import com.kh.hellomentor.member.model.dao.MemberDao;
 import com.kh.hellomentor.member.model.vo.Member;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -44,29 +43,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updateMember(Member updatedMember) {
         memberDao.updateMember(updatedMember);
-    }
-
-
-
-
-    @Override
-    public int insertUpdateToken(Map<String, Object> tokenData) {
-        return memberDao.insertUpdateToken(tokenData);
-    }
-
-    @Override
-    public int exchangeToken(Member m) {
-        return memberDao.exchangeToken(m);
-    }
-
-    @Override
-    public int getUpdateToken(int userNo) {
-        return memberDao.getUpdateToken(userNo);
-    }
-
-    @Override
-    public int paymentResult(int userNo) {
-        return memberDao.paymentResult(userNo);
     }
 
 }

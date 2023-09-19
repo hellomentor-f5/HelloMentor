@@ -25,6 +25,4 @@ public class Member {
     private int token;
     private String grade;
     private String profile;
-
-
 }

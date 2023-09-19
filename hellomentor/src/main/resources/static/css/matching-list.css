@@ -253,19 +253,7 @@
     font-size: 28px;
 }
 
-.Efollow-button {
-    background-color: #DFF6ED;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
-    width: 100px;
-    height: 32px;
-    font-size: 20px;
-    font-family: "bd";
-    cursor: pointer;
-}
-
-.Ofollow-button {
+.follow-button {
     background-color: #DFF6ED;
     border-radius: 10px;
     border: none;
@@ -321,21 +309,10 @@
     width: 100%;
     font-size: 20px;
     margin-bottom: 40px;
-    margin-left: 800px;
 }
 
-.pay-btn{
-  background-color: #48917A;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4) !important;
-    width: 100px;
-    height: 32px;
-    font-size: 20px;
-    font-family: "bd";
-    cursor: pointer;
-}
 
+.pay-btn,
 .suggest-btn {
     background-color: #48917A;
     border-radius: 10px;
@@ -354,32 +331,4 @@
 
 .suggest-btn:hover {
     color: white;
-}
-
-.pagination ul {
-    list-style: none; /* 블릿 기호 제거 */
-    padding: 0; /* 리스트의 패딩 제거 */
-    margin: 0; /* 리스트의 마진 제거 */
-}
-
-.pagination li {
-    display: inline; /* 항목을 가로로 나열 */
-    margin-right: 10px; /* 항목 사이의 간격을 조절할 수 있음 */
-}
-
-.pagination a {
-    text-decoration: none; /* 링크의 밑줄 제거 */
-    padding: 5px 10px; /* 링크 내용에 패딩 추가 (선택 사항) */
-    background-color: #f2f2f2; /* 배경색 설정 (선택 사항) */
-    color: #333; /* 텍스트 색상 설정 (선택 사항) */
-}
-
-.pagination a:hover {
-    background-color: #ddd; /* 마우스 오버 시 배경색 변경 (선택 사항) */
-}
-.pagination li.active a {
-    background-color: #ddd; /* 현재 페이지 버튼 배경색 변경 */
-    color: #fff; /* 현재 페이지 버튼 텍스트 색상 변경 */
-}
-
 }

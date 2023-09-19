@@ -52,28 +52,14 @@
       </button>
       <!-- 스터디 작성자는 신청이 안보임 -->
       <th:block th:if="${dstudy.userNo != loginUser.userId}">
-        <form id="apply-form" th:action="@{/study/applicant}" method="post">
-          <input type="hidden" name="userNo" th:value="${loginUser.userNo}"/>
-          <input type="hidden" name="postNo" th:value="${dstudy.postNo}"/>
-
-
-          <th:block th:if="${studyDetailApplicant != boardstudypeple && duStudy == null}">
-              <button type="submit" class="s-btns">신청</button>
-            </th:block>
-
-        </form>
+        <button type="submit" class="s-btns" id="apply-button">신청</button>
       </th:block>
-
-
-
-
-
-
-
+      <!-- 수정, 삭제 버튼은 작성자만 보이게 설정 -->
+      <!-- <button type="button" class="s-btns" id="edit-button">수정</button> -->
 
       <th:block th:if="${dstudy.userNo == loginUser.userId}">
-        <form method="post" th:action="@{/study/delete}" >
-          <input type="hidden" name="postNo" th:value="${dstudy.postNo}"/>
+        <form method="POST" action="/board/delete/{postNo}">
+          <input type="hidden" name="postNo" th:value="${dstudy.postNo}" />
           <button type="submit" class="s-btns" id="delete-button">삭제</button>
         </form>
       </th:block>
@@ -89,8 +75,8 @@
 
     <table id="reply-list">
       <tbody>
-      <th:block th:each="replyList, rowStat : ${replyList}">
-        <tr id="reply-${rowStat.index}" th:attr="data-reply-id=${replyList.replyId}">
+      <th:block th:each="replyList : ${replyList}">
+        <tr>
           <td width="550px" th:text="${replyList.replyContent}"></td>
           <td width="80px" th:text="${replyList.userNo}"></td>
           <td width="5px">|</td>
@@ -103,7 +89,6 @@
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    onclick="deleteComment(this)"
             >
               <path
                       d="M3 6H21"
@@ -200,13 +185,13 @@
                 console.log(replyList);
                 let html = "";
                 for (let reply of replyList) {
-                    html += "<tr data-reply-id='"+reply.replyId+"'>";
+                    html += "<tr>";
                     html += "<td width='550px'>" + reply.replyContent + "</td>";
                     html += "<td width='80px'>" + reply.userNo + "</td>";
                     html += "<td width='5px'>|</td>";
                     html += "<td width='100px'>" + reply.createDate + "</td>";
                     html += "<td width='50px'>";
-                    html += "<svg class='trash-logo' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' onclick='deleteComment(this)'>";
+                    html += "<svg class='trash-logo' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>";
                     html += "<path d='M3 6H21' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' />";
                     html += "<path d='M19 6V20C19 21 18 22 17 22H7C6 22 5 21 5 20V6' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' />";
                     html += "<path d='M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' />";
@@ -218,44 +203,10 @@
                 }
 
                 $("#reply-list tbody").html(html);
-                $("#rcount").html("댓글 | " + replyList.length);
+                $("#rcount").html(replyList.length);
             }
         });
     }
     </script>
-
-<script th:inline="javascript">
-    function deleteComment(svgElement) {
-        // 여기에서 댓글 삭제 요청을 서버로 보낼 수 있습니다.
-        // svgElement는 클릭한 SVG 요소를 나타냅니다.
-
-        var replyId = $(svgElement).closest("tr").data("reply-id");
-        console.log(replyId);
-
-        // 이제 replyId를 사용하여 AJAX 요청을 서버로 보내서 댓글 삭제를 처리할 수 있습니다.
-        $.ajax({
-            url: "/hellomentor/study/deleteReply",
-            type: "POST",
-            data: { replyId: replyId },
-            success: function(data) {
-                console.log(data);
-                if (data === 1) {
-                    // 삭제 성공 시 화면에서 해당 댓글을 제거하거나 업데이트할 수 있습니다.
-                    //$(svgElement).closest("tr").remove();
-                     alert("댓글 삭제에 성공했습니다.");
-                     selectReplyList();
-                } else {
-                    alert("댓글 삭제에 실패했습니다.");
-                }
-            },
-            error: function() {
-                alert("댓글 삭제 중 오류가 발생했습니다.");
-            }
-        });
-    }
-</script>
-
-
-
 </body>
 </html>

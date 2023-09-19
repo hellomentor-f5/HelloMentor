@@ -33,8 +33,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @SessionAttributes({"loginUser"})
 public class BoardController {
 
-
-
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     @Autowired
@@ -272,62 +270,23 @@ public class BoardController {
     //정승훈 스터디화면으로 이동 그리고 조회
     @GetMapping("/study")
     public String selectStudy(
-            @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "pageSize", defaultValue = "4") int pageSize,
-            @RequestParam(name = "searchOption", required = false) String searchOption,
-            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
             Model model,
             @RequestParam Map<String, Object> paramMap,
             Board board,
             Study study,
-            StudyApplicant sa,
             HttpServletRequest request
     ) {
-        List<Board> list;
-        long totalItems = 0;
-//        pageItems = list
-
-
-        if (searchOption != null && keyword != null) {
-            // 검색 로직을 수행하고 결과를 처리
-            totalItems = boardService.selectStudyListCount(searchOption, keyword);//현재 검색된 게시글의 총 갯수 board테이블 게시글 boardType = 'S'인경우
-            // Board 데이터 조회
-            list = boardService.selectStudyList(searchOption,keyword, page, pageSize,paramMap); //현재 검색된 게시글 board조회한것들 제목이랑 아이디
-        } else {
-            // 일반 목록을 가져옵니다
-            totalItems = boardService.selectListCount(); //전체 일반목록의 총 갯수
-            list = boardService.getSideStudyList(page, pageSize); //전체 일반목록의 게시글
-        }
-        long tatalPages =0;
-
-        // 전체 항목 수를 가져옵니다 (yourService에서 구현)
-        if(totalItems == 0) {
-            totalItems = 1;
-            tatalPages = (totalItems + pageSize - 1) / pageSize;
-        }
-        tatalPages = (totalItems + pageSize - 1) / pageSize;
-// 모델에 데이터와 페이징 정보를 추가합니다
-        model.addAttribute("sideMember", list);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("searchOption", searchOption);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("totalPages", tatalPages); // 총 페이지 수 추가
-
-        System.out.println("토탈아이템의 값: " + totalItems);
 
         //2023-09-08 정승훈 수정
-
 
         // Study 데이터 조회
         List<Study> peopleList = boardService.selectStudyList(new Study());
 
+        // Board 데이터 조회
+        List<Board> list = boardService.selectStudyList(currentPage, paramMap);
 
-
-
-
-        // Study와 Board 데이터를 연관시켜 Map에 저장 postRecruitmentCountMap1는 총 인원수임 study_Applicant 테이블에서 조회해옴
+        // Study와 Board 데이터를 연관시켜 Map에 저장
         Map<Integer, Integer> postRecruitmentCountMap1 = new HashMap<>();
         for (Board boardItem : list) {
             for (Study studyItem : peopleList) {
@@ -348,8 +307,7 @@ public class BoardController {
         paramMap.put("POST_NO_LIST", postNoList);
 
         log.info("paramMap {}" ,paramMap );
-
-        // POST_NO별 RECRUITMENT_COUNT 조회 스터디 테이블에서의 list들 people에대한..
+        // POST_NO별 RECRUITMENT_COUNT 조회
         List<Map<String, Object>> recruitmentCountList = boardService.selectRecruitmentCount(paramMap);
 
         log.info("recruitmentCountList {}" ,recruitmentCountList);
@@ -375,13 +333,7 @@ public class BoardController {
         log.info("list {}",list);
 
 
-
         // 총 게시글 갯수
-
-        //이미 신청한 회원은 그 게시글에 또 신청못하게 중복신청 방지
-
-
-
 
 
         model.addAttribute("param", paramMap); //보드타입
@@ -410,18 +362,15 @@ public class BoardController {
             Model model,
             Board board,
             Study study,
-            StudyApplicant studyApplicant,
             RedirectAttributes redirectAttributes
     ) {
         Member loginUser = (Member) session.getAttribute("loginUser");
         board.setUserNo(loginUser.getUserNo()+""); //작성자의 번호도 넣어주기
-        studyApplicant.setUserNo(loginUser.getUserNo()+"");
 
 
         Map<String, Object> boardData = new HashMap<>();
         boardData.put("board", board); // Board 객체를 Map에 추가
         boardData.put("study", study); // People 값을 Map에 추가
-        boardData.put("studyApplicant", studyApplicant); // studyApplicant 객체를 Map에 추가
 
 
         int result = 0;
@@ -438,7 +387,6 @@ public class BoardController {
         log.info("POST_TITLE{}",board.getPostTitle());
         log.info("POST_CONTENT{}",board.getPostContent());
         log.info("result {}" , result);
-        log.info("boardData {}" , boardData);
 
         if(result > 0) {
             redirectAttributes.addFlashAttribute("message", "스터디 등록이 완료되었습니다");
@@ -468,6 +416,8 @@ public class BoardController {
         //게시글에있는 정보들 조회 (제목,작성자,작성날짜,조회수)
         Board dstudy = boardService.selectDetailStudy(postNo);
 
+
+
         //신청자 인원수 조회
         int studyDetailApplicant = boardService.studyDetailApplicant(postNo);
 
@@ -479,25 +429,17 @@ public class BoardController {
 //        //댓글리스트 조회
         List<Reply> replyList = boardService.selectReplyList(postNo);
 
-        int duUserNo = loginUser.getUserNo();
-        Map<String, Integer> params = new HashMap<>();
-        params.put("postNo", postNo);
-        params.put("duUserNo", duUserNo);
-        //중복신청방지
-
-        StudyApplicant duStudy = boardService.duStudy(params);
-
-
-
         String url = "";
 
+        log.info("postNo{}",postNo);
+        log.info("dstudy {}",dstudy);
+        log.info("loginUser {}",loginUser);
+        log.info("boardstudypeple {}",boardstudypeple);
 
 
 
 
 
-
-        model.addAttribute("duStudy",duStudy);
         model.addAttribute("replyList",replyList);
         model.addAttribute("loginUser",loginUser);
         model.addAttribute("dstudy",dstudy);
@@ -516,7 +458,6 @@ public class BoardController {
 
     //------------------------- 정승훈 작업---------------------------
 
-    //댓글등록
     @PutMapping("/study/insertReply")
     @ResponseBody
     public int insertReply(Reply r, HttpSession session){
@@ -531,8 +472,6 @@ public class BoardController {
         return result;
     }
 
-
-    //스터디 댓글 조회
     @GetMapping("/study/selectReplyList")
     @ResponseBody
     public List<Reply> selectReplyList(int postNo,Model model){
@@ -540,73 +479,9 @@ public class BoardController {
     }
 
 
-    //스터디 댓글 삭제
-    @PostMapping("/study/deleteReply")
-    @ResponseBody
-    public int deleteReply(
-            Reply r
-    ){
-        int result = boardService.deleteReply(r);
-
-
-
-        return result;
-    }
-
-    //스터디 신청자 등록
-    @PostMapping("/study/applicant")
-    public String insertApplicant(
-            StudyApplicant sa,
-            @RequestParam("userNo") String userNo, @RequestParam("postNo") int postNo,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
-    ){
-        Member m = (Member) session.getAttribute("loginUser");
-
-
-        sa.setUserNo(m.getUserNo() + "");
-        sa.setPostNo(postNo);
-
-
-
-        int result = boardService.insertStudyApplicant(sa);
-
-
-
-        if (result > 0) {
-            redirectAttributes.addFlashAttribute("message", "스터디 신청이 완료되었습니다");
-            return "redirect:/study";
-        } else {
-            redirectAttributes.addFlashAttribute("message", "스터디 신청을 실패했습니다.");
-            return "common/main";
-        }
-
-
-        }
-
-        @PostMapping("/study/delete")
-        public String deleteApplicant(
-                @RequestParam("postNo") int postNo,
-                RedirectAttributes redirectAttributes
-        )
-        {
-            int result = boardService.studyDelete(postNo);
-
-            if (result > 0) {
-                redirectAttributes.addFlashAttribute("message", "스터디 게시글이 삭제되었습니다");
-                return "redirect:/study";
-            } else {
-                redirectAttributes.addFlashAttribute("message", "스터디 게시글 삭제를 실패했습니다.");
-                return "common/main";
-            }
-        }
-
-
-
-
-    }
 
 
 
 
 
+}

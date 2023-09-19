@@ -4,11 +4,8 @@ import com.kh.hellomentor.member.model.vo.Member;
 import com.kh.hellomentor.member.model.vo.Profile;
 
 import java.util.List;
-import java.util.Map;
 
 public interface MemberService {
-
-
 
     Member loginUser(Member m);
 
@@ -22,12 +19,4 @@ public interface MemberService {
 
     void updateMember(Member loginUser);
 
-    //정승훈 토큰충전
-    int insertUpdateToken(Map<String, Object> tokenData);
-
-    int exchangeToken(Member m);
-
-    int getUpdateToken(int userNo);
-
-    int paymentResult(int userNo);
 }

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.hellomentor.member.model.vo.Payment;
 import com.kh.hellomentor.member.model.vo.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -196,122 +195,6 @@ public class MemberController {
     }
 
 
-    //정승훈 회원 토큰 충전
-    @PostMapping("/insert/token")
-    public String insertToken(
-            HttpSession session,
-            Model model,
-            RedirectAttributes redirectAttributes,
-            Payment payment,
-            Member m,
-            @RequestParam(name = "token", defaultValue = "") String token
-    ) {
-        Member loginUser = (Member) session.getAttribute("loginUser");
-        int newToken = Integer.parseInt(token); //선택된 토큰
-        int currentToken = loginUser.getToken(); //기존에 있던 토큰
-        int updatedToken = currentToken + newToken; //선택된 토큰과 + 기존에 있던 토큰
-
-        m.setToken(updatedToken); // 업데이트된 토큰 값을 Member 객체에 설정
-        m.setUserNo(loginUser.getUserNo());
-        payment.setUserNo(loginUser.getUserNo());
-
-
-        // token 값에 따라 price 설정
-        int price;
-        switch (token) {
-            case "10":
-                price = 1000;
-                break;
-            case "50":
-                price = 5000;
-                break;
-            case "100":
-                price = 10000;
-                break;
-            case "200":
-                price = 20000;
-                break;
-            case "500":
-                price = 50000;
-                break;
-            default:
-                price = 0;
-                break;
-        }
-        payment.setPrice(price); // payment 객체에 가격 설정
-
-        Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("payment", payment);
-        tokenData.put("m", m);
-
-
-        int result = mService.insertUpdateToken(tokenData);
-        log.info("tokenData {}", tokenData);
-        log.info("result {}", result);
-
-
-
-
-        int updateToken = mService.getUpdateToken(loginUser.getUserNo());
-        //변경된 토큰의 값을 다시 새로 세션에 담아줘야됨.
-        loginUser.setToken(updateToken);
-        session.setAttribute("loginUser", loginUser);
-
-
-
-        if (result >= 0) {
-            redirectAttributes.addFlashAttribute("message", "토큰충전 완료되었습니다");
-            return "redirect:/main";
-        } else {
-            redirectAttributes.addFlashAttribute("message", "토큰충전을 실패했습니다.");
-            return "common/main";
-        }
-    }
-
-    @PostMapping("/exchange/token")
-    public String exchageToken(
-            HttpSession session,
-            Member m,
-            Model model,
-            Payment payment,
-            RedirectAttributes redirectAttributes) {
-
-        Member loginUser = (Member) session.getAttribute("loginUser");
-
-        m.setUserNo(loginUser.getUserNo());
-        payment.setUserNo(loginUser.getUserNo());
-        log.info("loginUser {}", loginUser.getToken());
-
-        if (loginUser.getToken() == 0) {
-            model.addAttribute("message", "토큰이 비어있습니다. 충전페이지로 이동합니다.");
-            return "token/tokenInsert";
-        } else {
-            log.info("loginUser {}", loginUser.getToken());
-
-            int result = mService.exchangeToken(m);
-
-            // 변경된 토큰의 값을 가져오기
-            int updateToken = mService.getUpdateToken(loginUser.getUserNo());
-            int paymentresult = mService.paymentResult(loginUser.getUserNo());
-
-            //변경된 토큰의 값을 다시 새로 세션에 담아줘야됨.
-            loginUser.setToken(updateToken);
-            session.setAttribute("loginUser", loginUser);
-
-            log.info("result {}", result);
-            log.info("loginUser {}", loginUser.getToken());
-
-            model.addAttribute("token", loginUser.getToken());
-
-            if (result > 0) {
-                redirectAttributes.addFlashAttribute("message", "토큰환전이 완료되었습니다.");
-                return "redirect:/main";
-            } else {
-                model.addAttribute("message", "오류발생");
-                return "main";
-            }
-        }
-    }
 }
 
 

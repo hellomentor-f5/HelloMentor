@@ -98,35 +98,11 @@ public class BoardServiceImpl implements BoardService {
 
 
     //----------------------------------정승훈----------------------------------
-
     @Override
-    //페이징처리
-    public List<Board> selectStudyList(String searchOption, String keyword, int page, int pageSize,Map<String, Object> paramMap) {
-        return boardDao.selectStudyList(searchOption,keyword,page,pageSize,paramMap);
+    public List<Board> selectStudyList(int currentPage, Map<String, Object> paramMap) {
+        return boardDao.selectStudyList(currentPage, paramMap);
     }
 
-    @Override
-    public long selectListCount() {
-        return boardDao.selectListCount();
-    }
-
-    @Override
-    public StudyApplicant duStudy(Map<String, Integer> params) {
-        return boardDao.duStudy(params);
-    }
-
-
-    @Override
-    public List<Board> getSideStudyList(int page, int pageSize) {
-        return boardDao.getSideStudyList(page,pageSize);
-    }
-
-    @Override
-    public long selectStudyListCount(String searchOption, String keyword) {
-        return boardDao.selectStudyListCount(searchOption, keyword);
-    }
-
-    //--------------------------------------------------------------
 
     @Override
     public List<StudyApplicant> selectPepleList(Map<String, Object> paramMap) {
@@ -160,7 +136,6 @@ public class BoardServiceImpl implements BoardService {
         return boardDao.selectReplyList(postNo);
     }
 
-
     @Override
     public int insertBoardAndStudy(Map<String, Object> boardData) {
         return boardDao.insertBoardAndStudy(boardData);
@@ -182,28 +157,6 @@ public class BoardServiceImpl implements BoardService {
     public int selectStudypeople(int postNo) {
         return boardDao.selectStudypeople(postNo);
     }
-
-    //------------------2023-09-10 정승훈 작업-----------------
-
-    //댓글삭제
-    @Override
-    public int deleteReply(Reply r) {
-        return boardDao.deleteReply(r);
-    }
-
-    @Override
-    public int insertStudyApplicant(StudyApplicant sa) {
-        return boardDao.insertStudyApplicant(sa);
-    }
-
-    @Override
-    public int studyDelete(int postNo) {
-        return boardDao.studyDelete(postNo);
-    }
-
-
-
-
 
 
 }

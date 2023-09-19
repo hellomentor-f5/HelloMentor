@@ -90,43 +90,9 @@
         </update>
 
 
-    <!-- memberMapper.selectToken -->
-    <select id="selectToken" parameterType="member" resultType="int">
-        SELECT COALESCE(token, 0)
-        FROM MEMBER
-        WHERE USER_NO = #{userNo}
-    </select>
-
-    <!-- memberMapper.updateToken -->
-    <update id="updateToken" parameterType="member">
-        UPDATE MEMBER
-        SET TOKEN = #{token}
-        WHERE USER_NO = #{userNo}
-    </update>
-
-    <!-- memberMapper.insertPayment -->
-    <insert id="insertPayment" parameterType="payment">
-        INSERT INTO PAYMENT(USER_NO, PAY_DATE, PAY_CONTENT, PRICE, PAY_TYPE)
-        VALUES (#{userNo}, CURRENT_DATE(), '토큰충전1', #{price}, 'T')
-    </insert>
 
 
-    <update id="exchangeToken" parameterType="member">
-        UPDATE MEMBER
-        SET TOKEN = 0
-        WHERE USER_NO = #{userNo}
-    </update>
 
-    <select id="selectupdateToken" parameterType="int" resultType="int">
-        SELECT TOKEN FROM
-        MEMBER
-        WHERE USER_NO = #{userNo}
-    </select>
-
-    <insert id="insertPaymentResult" parameterType="int">
-        INSERT INTO PAYMENT(USER_NO, PAY_DATE, PAY_CONTENT, PRICE, PAY_TYPE)
-        VALUES (#{userNo}, CURRENT_DATE(), '토큰환전1', #{price}, 'E')
-    </insert>
 
 </mapper>
 

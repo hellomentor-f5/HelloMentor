@@ -14,8 +14,7 @@ import java.sql.Date;
 public class Matching {
     private int matchNo;
     private int matchingRegisNo;
-    private int mentorRegisNo;
-    private int menteeRegisNo;
+    private int menteeNo;
     private String status;
     private Date createDate;
 }
