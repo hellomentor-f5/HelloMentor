@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class StudyApplicant {
     private int postNo;
     private int applicantNo;
-    private int userNo;
+    private String userNo;
     private String status;
 }

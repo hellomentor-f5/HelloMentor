@@ -18,5 +18,4 @@ public class Profile {
     private long fileSize;
     private String filePath;
     private String originName;
-
 }

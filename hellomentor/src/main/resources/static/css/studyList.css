@@ -215,3 +215,30 @@
     background-color: #48917A;
     color: #fff;
 }
+
+.pagination ul {
+    list-style: none; /* 블릿 기호 제거 */
+    padding: 0; /* 리스트의 패딩 제거 */
+    margin: 0; /* 리스트의 마진 제거 */
+}
+
+.pagination li {
+    display: inline; /* 항목을 가로로 나열 */
+    margin-right: 10px; /* 항목 사이의 간격을 조절할 수 있음 */
+}
+
+.pagination a {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    padding: 5px 10px; /* 링크 내용에 패딩 추가 (선택 사항) */
+    background-color: #f2f2f2; /* 배경색 설정 (선택 사항) */
+    color: #333; /* 텍스트 색상 설정 (선택 사항) */
+}
+
+.pagination a:hover {
+    background-color: #ddd; /* 마우스 오버 시 배경색 변경 (선택 사항) */
+}
+.pagination li.active a {
+    background-color: #ddd; /* 현재 페이지 버튼 배경색 변경 */
+    color: #fff; /* 현재 페이지 버튼 텍스트 색상 변경 */
+}
+

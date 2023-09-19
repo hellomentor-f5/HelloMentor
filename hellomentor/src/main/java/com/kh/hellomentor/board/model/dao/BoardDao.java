@@ -1,5 +1,6 @@
 package com.kh.hellomentor.board.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,14 +99,7 @@ public class BoardDao {
 
 
     //정승훈 구역
-    public List<Board> selectStudyList(int currentPage, Map<String, Object> paramMap) {
-        int offset = (currentPage - 1) * 5; //몇개의 페이지를 나타낼건지를 나타냄
-        int limit = 5; //총 몇개의 게시글을 가지고 올것인지 나타냄
 
-        RowBounds rowBounds = new RowBounds(offset, limit);
-
-        return session.selectList("boardMapper.selectStudyList", paramMap, rowBounds);
-    }
 
 
 
@@ -117,6 +111,11 @@ public class BoardDao {
     public List<Map<String, Object>> selectRecruitmentCount(Map<String, Object> paramMap) {
         return session.selectList("boardMapper.selectRecruitmentCount", paramMap);
     }
+
+
+
+
+
 
     public int insertStudy(Board b) {
         return session.insert("boardMapper.insertStudy",b);
@@ -134,18 +133,30 @@ public class BoardDao {
 
     public int insertBoardAndStudy(Map<String, Object> boardData) {
         int result = 0;
-
         Board b = (Board) boardData.get("board");
         Study s = (Study) boardData.get("study");
+        StudyApplicant sa = (StudyApplicant) boardData.get("studyApplicant");
 
 
-        result = session.insert("boardMapper.insertBoard",b);
+        // board 테이블에 데이터 삽입
+        result = session.insert("boardMapper.insertBoard", b);
 
-        if(result > 0) {
+        if (result > 0) {
+            // board 테이블에 데이터를 삽입한 후 자동 생성된 postNo 값을 가져옴
+            int postNo = b.getPostNo();
+
+            // study 테이블에 데이터 삽입
+            s.setPostNo(postNo);
             result = session.insert("boardMapper.insertStudy", s);
-        }
-    return result;
 
+            if (result > 0) {
+                // studyApplicant 테이블에 데이터 삽입
+                sa.setPostNo(postNo);
+                result = session.insert("boardMapper.insertStudyApplicant1", sa);
+            }
+        }
+
+        return result;
     }
 
 
@@ -168,8 +179,57 @@ public class BoardDao {
     }
 
 
-    //------------------------------정승훈-----------------------------------------
+    //댓글삭제
+    public int deleteReply(Reply r) {
+        return session.delete("boardMapper.deleteReply",r);
+    }
 
 
+    public int insertStudyApplicant(StudyApplicant sa) {
+        return session.insert("boardMapper.insertStudyApplicant",sa);
+    }
 
+
+    public int studyDelete(int postNo) {
+        return session.delete("boardMapper.studyDelete",postNo);
+    }
+
+
+    public int selectListCount() {
+        return session.selectOne("boardMapper.selectSListCount");}
+
+    public int selectStudyListCount(String searchOption, String keyword) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("searchOption", searchOption);
+        paramMap.put("keyword", keyword);
+        return session.selectOne("boardMapper.selectStudyListCount", paramMap);
+    }
+
+    public List<Board> selectStudyList(String searchOption, String keyword, int page, int pageSize, Map<String, Object> paramMap) {
+        int start = (page - 1) * pageSize;
+        paramMap.put("searchOption", searchOption);
+        paramMap.put("keyword", keyword);
+        paramMap.put("start", start);
+        paramMap.put("pageSize", pageSize);
+
+        return session.selectList("boardMapper.searchStudyList", paramMap);
+    }
+
+    public List<Board> getSideStudyList(int page, int pageSize) {
+        //페이징 정보를 이용하여 시작 위치를 계산합니다.
+        int start = (page - 1) * pageSize;
+
+        // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("pageSize", pageSize);
+
+        return session.selectList("boardMapper.getSideStudyList", params);
+    }
+
+
+    public StudyApplicant duStudy(Map<String, Integer> params) {
+        return session.selectOne("boardMapper.duStudy", params);
+    }
 }
+
