@@ -181,7 +181,8 @@
                         html += `<div class="detail_user">
                         <div class="detail-section1">
                             <div class="profile-img-container">
-                              <img th:src="@{${data.profile.filePath} + ${data.profile.changeName}}"/>
+                              <img src="${data.profile.filePath}${data.profile.changeName}"/>
+
                             </div>
                             <div class="infomation">
                                 <div>${data.member.userId}</div>
