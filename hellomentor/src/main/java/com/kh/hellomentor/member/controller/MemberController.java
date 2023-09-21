@@ -49,35 +49,35 @@ public class MemberController {
 
     @Autowired
     private MatchingService mtService;
-   
+
     @Autowired
     private EmailService emailService;
-    
-    
+
+
     @PostMapping("login.me")
     public String loginMember(
-  		            RedirectAttributes redirectAttributes,
-                      @ModelAttribute Member m , 
-                      HttpSession session , 
-                      Model model
-          ) {
-       Member loginUser = mService.loginUser(m);
-       String url = "";
-       if(loginUser != null) {
-      	 if(loginUser.getUserId().equals("admin")){
-      		 session.setAttribute("loginUser", loginUser);
-      		 redirectAttributes.addFlashAttribute("message", "관리자님 반갑습니다");
-               url = "redirect:/admin/selectList";
-      	 }else {
-      		 session.setAttribute("loginUser", loginUser);
-      		 model.addAttribute("message", loginUser.getUserName()+"님 반갑습니다");
-               url = "redirect:/main";
-      	 }
-      	 }else{
-      		 model.addAttribute("message", "아이디 또는 비밀번호를 확인해주세요.");
-      		 url = "login/login";
-      	 }
-       return url;
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute Member m,
+            HttpSession session,
+            Model model
+    ) {
+        Member loginUser = mService.loginUser(m);
+        String url = "";
+        if (loginUser != null) {
+            if (loginUser.getUserId().equals("admin")) {
+                session.setAttribute("loginUser", loginUser);
+                redirectAttributes.addFlashAttribute("message", "관리자님 반갑습니다");
+                url = "redirect:/admin/selectList";
+            } else {
+                session.setAttribute("loginUser", loginUser);
+                model.addAttribute("message", loginUser.getUserName() + "님 반갑습니다");
+                url = "redirect:/main";
+            }
+        } else {
+            model.addAttribute("message", "아이디 또는 비밀번호를 확인해주세요.");
+            url = "login/login";
+        }
+        return url;
     }
 
     @PostMapping("/sign.up")
@@ -97,25 +97,26 @@ public class MemberController {
         }
         return url;
     }
+
     @ResponseBody
     @GetMapping("/member/idCheck.me")
     public int idCheck(@RequestParam("userId") String userId) {
-    	int result = mService.idCheck(userId);
+        int result = mService.idCheck(userId);
 
-    	return result;
-      	
-      }
-    
+        return result;
+
+    }
+
     @ResponseBody
     @PostMapping("login/mailConfirm")  //이메일    
-    public String EmailCheck(@RequestParam(name = "email") String email) throws MessagingException{
-    	   System.out.println(email);  
-    	   
-    	   String authCode = emailService.sendEmail(email);
-    	   
-           return authCode;
+    public String EmailCheck(@RequestParam(name = "email") String email) throws MessagingException {
+        System.out.println(email);
+
+        String authCode = emailService.sendEmail(email);
+
+        return authCode;
     }
-    
+
 
     @RequestMapping("/home_follow")
     public String homeFollow() {
@@ -129,7 +130,6 @@ public class MemberController {
         int userNo = loginUser.getUserNo();
         List<Member> followingList = mService.getFollowList(userNo);
         List<Profile> profileList = mService.getFollowingProfileList(userNo);
-
 
 
         List<Map<String, Object>> combinedList = new ArrayList<>();
@@ -208,33 +208,31 @@ public class MemberController {
 
     public String uploadProfileImg(MultipartFile file, int userNo) throws IOException {
         String currentDirectory = System.getProperty("user.dir");
-//        C:\HelloMentor\hellomentor
-//        System.out.println(currentDirectory);
 
-        String uploadDir = currentDirectory + "/src/main/resources/static/img/profile/";
-//        String buildUploadDir = currentDirectory + "/hellomentor/build/resources/main/static/img/profile/";
+        String uploadDir = currentDirectory + "/hellomentor/src/main/resources/static/img/profile/";
+        String buildUploadDir = currentDirectory + "/hellomentor/build/resources/main/static/img/profile/";
 
 
         String fileName = "profile_" + userNo + ".jpg";
 
         File uploadPath = new File(uploadDir);
-//        File buildUploadPath = new File(buildUploadDir);
+        File buildUploadPath = new File(buildUploadDir);
 
         if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
 
-//        if (!buildUploadPath.exists()) {
-//            buildUploadPath.mkdirs();
-//        }
+        if (!buildUploadPath.exists()) {
+            buildUploadPath.mkdirs();
+        }
 
 
         File destFile = new File(uploadPath, fileName);
-//        File buildDestFile = new File(buildUploadPath, fileName);
+        File buildDestFile = new File(buildUploadPath, fileName);
 
         file.transferTo(destFile);
 
-//        Files.copy(destFile.toPath(), buildDestFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(destFile.toPath(), buildDestFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         return fileName;
     }
@@ -519,13 +517,10 @@ public class MemberController {
         log.info("result {}", result);
 
 
-
-
         int updateToken = mService.getUpdateToken(loginUser.getUserNo());
         //변경된 토큰의 값을 다시 새로 세션에 담아줘야됨.
         loginUser.setToken(updateToken);
         session.setAttribute("loginUser", loginUser);
-
 
 
         if (result >= 0) {
@@ -581,7 +576,6 @@ public class MemberController {
             }
         }
     }
-
 
 
 }

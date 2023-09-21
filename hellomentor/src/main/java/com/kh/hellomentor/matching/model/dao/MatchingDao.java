@@ -185,4 +185,13 @@ public class MatchingDao {
         sqlSession.update("matchingMapper.mentoringAccept", paramMap);
     }
 
+    public int mentorupdateToken(Map<String, Object> mentorToken) {
+        int result = 0;
+
+        result = sqlSession.update("matchingMapper.mentorupdateToken",mentorToken);
+
+        return result;
+    }
+
+
 }

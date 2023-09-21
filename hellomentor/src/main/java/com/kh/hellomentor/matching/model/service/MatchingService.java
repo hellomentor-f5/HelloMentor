@@ -61,4 +61,6 @@ public interface MatchingService {
     void mentoring_cancel(int userNo, int regisNo);
 
     void mentoring_accept(int userNo, int regisNo, int loginuserNo);
+
+    int mentorupdateToken(Map<String, Object> mentorToken);
 }

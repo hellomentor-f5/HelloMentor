@@ -347,5 +347,11 @@
         WHERE MENTOR_REGIS_NO = #{userNo} AND MATCHING_REGIS_NO = #{regisNo} AND MENTEE_REGIS_NO = #{loginNo};
     </update>
 
+    <update id="mentorupdateToken" parameterType="hashMap">
+        UPDATE MEMBER
+        SET TOKEN = #{token1}
+        WHERE USER_NO = #{userNo}
+    </update>
+
 </mapper>
 

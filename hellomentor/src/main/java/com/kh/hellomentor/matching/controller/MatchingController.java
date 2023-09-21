@@ -244,6 +244,15 @@ public class MatchingController {
 
         int supdateToken = matchingService.getUpdateToken(loginUser.getUserNo());
 
+        Map<String, Object> mentorToken = new HashMap<>();
+
+        mentorToken.put("token1",token1); //멘토에게 입금될 토큰의 값
+        mentorToken.put("userNo",userNo); //해당 멘토의 번호
+
+        int mentorupdateToken = matchingService.mentorupdateToken(mentorToken);
+
+
+
         loginUser.setToken(updateToken);
         session.setAttribute("loginUser", loginUser);
 

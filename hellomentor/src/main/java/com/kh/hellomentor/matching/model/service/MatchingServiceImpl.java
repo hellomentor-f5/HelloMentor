@@ -144,5 +144,9 @@ public class MatchingServiceImpl implements MatchingService{
     @Override
     public void mentoring_accept(int userNo, int regisNo, int loginuserNo) { matchingDao.mentoring_accept(userNo, regisNo, loginuserNo); }
 
+    @Override
+    public int mentorupdateToken(Map<String, Object> mentorToken) {
+        return matchingDao.mentorupdateToken(mentorToken);
+    }
 
 }
