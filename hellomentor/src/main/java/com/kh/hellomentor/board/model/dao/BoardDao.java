@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.hellomentor.member.controller.MemberController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class BoardDao {
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -32,10 +35,10 @@ public class BoardDao {
     }
 
 
-    // 이찬우 구역 시작
+ // 이찬우 구역 시작
     // 0. 조회수 증가
     public int increaseCount(int postNo) {
-    	return session.update("boardMapper.increaseCount",postNo);
+       return session.update("boardMapper.increaseCount",postNo);
     }
     //0-1. 게시글 삭제
     public int deletePost(int postNo) {
@@ -43,34 +46,38 @@ public class BoardDao {
     }
     // 1. 공지사항 게시글 조회 (페이징바, 필터링)
     public int selectNoticeCount() {
-    	return session.selectOne("boardMapper.selectNoticeCount");
+       return session.selectOne("boardMapper.selectNoticeCount");
     };
  
     public int searchNoticeCount(String ntkind, String keyword) {
-    	 Map<String, Object> paramMap = new HashMap<>();
-  	   paramMap.put("ntkind", ntkind);
-  	    paramMap.put("keyword", keyword);
-    	return session.selectOne("boardMapper.searchNoticeCount",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("ntkind", ntkind);
+         paramMap.put("keyword", keyword);
+       log.info("ntkind {}", ntkind);
+       return session.selectOne("boardMapper.searchNoticeCount",paramMap);
+       
     };
 
     public List<Board> selectNoticeList(int page, int pageSize){
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-  	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-  	   Map<String, Object> params = new HashMap<>();
-  	   params.put("start", start);
-  	   params.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.selectNoticeList",params);
+        // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("pageSize", pageSize);
+       return session.selectList("boardMapper.selectNoticeList",params);
     };
  
     public List<Board> searchNoticeList(String ntkind, String keyword, int page, int pageSize){
-    	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("ntkind", ntkind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.searchNoticeList",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("ntkind", ntkind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+         log.info("ntkind {}", ntkind);
+       return session.selectList("boardMapper.searchNoticeList",paramMap);
+       
     };
 
     // 1-2. 공지사항 상세 조회
@@ -81,51 +88,51 @@ public class BoardDao {
     //2. FAQ 조회
 
     public int selectFaqCount() {
-    	return session.selectOne("boardMapper.selectFaqCount");
+       return session.selectOne("boardMapper.selectFaqCount");
     };
  
     public int searchFaqCount(String faqkind, String keyword) {
-    	 Map<String, Object> paramMap = new HashMap<>();
-  	   paramMap.put("faqkind", faqkind);
-  	    paramMap.put("keyword", keyword);
-    	return session.selectOne("boardMapper.searchFaqCount",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("faqkind", faqkind);
+         paramMap.put("keyword", keyword);
+       return session.selectOne("boardMapper.searchFaqCount",paramMap);
     };
 
     public List<Board> selectFaqList(int page, int pageSize){
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-  	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-  	   Map<String, Object> params = new HashMap<>();
-  	   params.put("start", start);
-  	   params.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.selectFaqList",params);
+        // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("pageSize", pageSize);
+       return session.selectList("boardMapper.selectFaqList",params);
     };
  
     public List<Board> searchFaqList(String faqkind, String keyword, int page, int pageSize){
-    	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("faqkind", faqkind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.searchFaqList",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("faqkind", faqkind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+       return session.selectList("boardMapper.searchFaqList",paramMap);
     };
     
     //3. 1:1문의 등록
     public int insertInquiry(Board board) {
-    	int result = 0;
-    	int postNo = 0;
-    	result = session.insert("boardMapper.insertInquiry" , board);
-		
-		if(result > 0) {
-			postNo = board.getPostNo();
-			System.out.println(postNo);
-		}
-		
-		return postNo;
+       int result = 0;
+       int postNo = 0;
+       result = session.insert("boardMapper.insertInquiry" , board);
+      
+      if(result > 0) {
+         postNo = board.getPostNo();
+         System.out.println(postNo);
+      }
+      
+      return postNo;
     }
     public int insertInquiry2(Inquiry inquiry) {
-    	return session.insert("boardMapper.insertInquiry2" , inquiry);
+       return session.insert("boardMapper.insertInquiry2" , inquiry);
     }
 
     public int insertInquiryAttachment(List<Attachment> list) {
@@ -134,28 +141,28 @@ public class BoardDao {
     
     //4. 문의내역 조회
     public int selectInquiryCount() {
-    	return session.selectOne("boardMapper.selectInquiryCount");
+       return session.selectOne("boardMapper.selectInquiryCount");
     };
  
 
     public List<Board> selectInquiryList(int userNo, int page, int pageSize) {
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-    	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-    	   Map<String, Object> params = new HashMap<>();
-    	   params.put("start", start);
-    	   params.put("pageSize", pageSize);
-    	   params.put("userNo", userNo);
+          // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+          Map<String, Object> params = new HashMap<>();
+          params.put("start", start);
+          params.put("pageSize", pageSize);
+          params.put("userNo", userNo);
         return session.selectList("boardMapper.selectInquiryList",params);
     }
     public List<Inquiry> selectInquiryList2(int userNo, int page, int pageSize) {
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-    	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-    	   Map<String, Object> params = new HashMap<>();
-    	   params.put("start", start);
-    	   params.put("pageSize", pageSize);
-    	   params.put("userNo", userNo);
+          // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+          Map<String, Object> params = new HashMap<>();
+          params.put("start", start);
+          params.put("pageSize", pageSize);
+          params.put("userNo", userNo);
         return session.selectList("boardMapper.selectInquiryList2",params);
     }
     
@@ -169,55 +176,55 @@ public class BoardDao {
     
     //5. 자유게시판 조회
     public int selectFreeCount() {
-    	return session.selectOne("boardMapper.selectFreeCount");
+       return session.selectOne("boardMapper.selectFreeCount");
     };
  
     public int searchFreeCount(String freekind, String keyword,String views) {
-    	 Map<String, Object> paramMap = new HashMap<>();
-  	   paramMap.put("freekind", freekind);
-  	    paramMap.put("keyword", keyword);
-  	   paramMap.put("views", views);
-    	return session.selectOne("boardMapper.searchFreeCount",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("freekind", freekind);
+         paramMap.put("keyword", keyword);
+        paramMap.put("views", views);
+       return session.selectOne("boardMapper.searchFreeCount",paramMap);
     };
 
     public List<Board> selectFreeList(int page, int pageSize){
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-  	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-  	   Map<String, Object> params = new HashMap<>();
-  	   params.put("start", start);
-  	   params.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.selectFreeList",params);
+        // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("pageSize", pageSize);
+       return session.selectList("boardMapper.selectFreeList",params);
     };
     public List<Free> selectFreeList2(int page, int pageSize){
-   	 int start = (page - 1) * pageSize;
+       int start = (page - 1) * pageSize;
         
- 	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
- 	   Map<String, Object> params = new HashMap<>();
- 	   params.put("start", start);
- 	   params.put("pageSize", pageSize);
-   	return session.selectList("boardMapper.selectFreeList2",params);
+       // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+       Map<String, Object> params = new HashMap<>();
+       params.put("start", start);
+       params.put("pageSize", pageSize);
+      return session.selectList("boardMapper.selectFreeList2",params);
    };
  
     public List<Board> searchFreeList(String freekind, String keyword, String views, int page, int pageSize){
-    	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("freekind", freekind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("views", views);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.searchFreeList",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("freekind", freekind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("views", views);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+       return session.selectList("boardMapper.searchFreeList",paramMap);
     };
     public List<Free> searchFreeList2(String freekind, String keyword,String views, int page, int pageSize){
-   	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("freekind", freekind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("views", views);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-   	return session.selectList("boardMapper.searchFreeList2",paramMap);
+       Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("freekind", freekind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("views", views);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+      return session.selectList("boardMapper.searchFreeList2",paramMap);
    };
     
     //5-1. 자유게시판 조회 (화제글 3개)
@@ -240,20 +247,20 @@ public class BoardDao {
 
     //5-3. 자유게시판 글 작성
     public int insertFree(Board board) {
-    	int result = 0;
-    	int postNo = 0;
-    	result = session.insert("boardMapper.insertFree" , board);
-		
-		if(result > 0) {
-			postNo = board.getPostNo();
-			// 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
-			System.out.println(postNo);
-		}
-		
-		return postNo;
+       int result = 0;
+       int postNo = 0;
+       result = session.insert("boardMapper.insertFree" , board);
+      
+      if(result > 0) {
+         postNo = board.getPostNo();
+         // 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
+         System.out.println(postNo);
+      }
+      
+      return postNo;
     }
     public int insertFree2(int postNo) {
-    	return session.insert("boardMapper.insertFree2" , postNo);
+       return session.insert("boardMapper.insertFree2" , postNo);
     }
    
     public int insertFreeAttachment(List<Attachment> list) {
@@ -261,9 +268,9 @@ public class BoardDao {
     }
     //5-4. 자유게시판 댓글 삽입
     public int insertFreeReply(Reply reply) {
-		return session.insert("boardMapper.insertFreeReply" , reply);
-	}
-	//5-5. 자유게시판 댓글 조회
+      return session.insert("boardMapper.insertFreeReply" , reply);
+   }
+   //5-5. 자유게시판 댓글 조회
     public List<Reply> selectFreeReplyList(int postNo) {
         return session.selectList("boardMapper.selectFreeReplyList",postNo);
     }
@@ -273,85 +280,83 @@ public class BoardDao {
     }
     // 5-7. 자유게시판 추천수 증가
     public int increaseUpvotes(int postNo) {
-    	return session.update("boardMapper.increaseUpvotes",postNo);
+       return session.update("boardMapper.increaseUpvotes",postNo);
     }
     // 5-8. 자유게시판 수정
     public int insertAttachment(Attachment attach) {
-		return session.insert("boardMapper.insertAttachment", attach);
-	}
+      return session.insert("boardMapper.insertAttachment", attach);
+   }
     public int updateFree(Board b) {
-		return session.update("boardMapper.updateFree" , b);
-	}
-    public int updateAttachment(Attachment at) {
-		return session.update("boardMapper.updateAttachment", at);
-	}
+      return session.update("boardMapper.updateFree" , b);
+   }
     public int deleteAttachment(List<String> deleteList) {
-		return session.delete("boardMapper.deleteAttachment" , deleteList);
-	}
+      return session.delete("boardMapper.deleteAttachment" , deleteList);
+   }
     //6. 지식인 조회 (메인)
     public int selectKnowledgeCount() {
-    	return session.selectOne("boardMapper.selectKnowledgeCount");
+       return session.selectOne("boardMapper.selectKnowledgeCount");
     };
  
     public int searchKnowledgeCount(String knowledgekind, String keyword, String best, String accepted) {
-    	 Map<String, Object> paramMap = new HashMap<>();
-  	   paramMap.put("knowledgekind", knowledgekind);
-  	    paramMap.put("keyword", keyword);
-  	  paramMap.put("best", best);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("knowledgekind", knowledgekind);
+         paramMap.put("keyword", keyword);
+       paramMap.put("best", best);
       paramMap.put("accepted", accepted);
-    	return session.selectOne("boardMapper.searchKnowledgeCount",paramMap);
+       return session.selectOne("boardMapper.searchKnowledgeCount",paramMap);
     };
 
     public List<Board> selectKnowledgeList(int page, int pageSize){
-    	 int start = (page - 1) * pageSize;
+        int start = (page - 1) * pageSize;
          
-  	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
-  	   Map<String, Object> params = new HashMap<>();
-  	   params.put("start", start);
-  	   params.put("pageSize", pageSize);
-    	return session.selectList("boardMapper.selectKnowledgeList",params);
+        // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start);
+        params.put("pageSize", pageSize);
+       return session.selectList("boardMapper.selectKnowledgeList",params);
     };
     public List<Knowledge> selectKnowledgeList2(int page, int pageSize){
-   	 int start = (page - 1) * pageSize;
+       int start = (page - 1) * pageSize;
         
- 	   // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
- 	   Map<String, Object> params = new HashMap<>();
- 	   params.put("start", start);
- 	   params.put("pageSize", pageSize);
-   	return session.selectList("boardMapper.selectKnowledgeList2",params);
+       // MyBatis 매퍼를 사용하여 데이터베이스에서 페이징된 데이터를 조회합니다.
+       Map<String, Object> params = new HashMap<>();
+       params.put("start", start);
+       params.put("pageSize", pageSize);
+      return session.selectList("boardMapper.selectKnowledgeList2",params);
    };
   
     public List<Board> searchKnowledgeList(String knowledgekind, String keyword, String best, String accepted,int page, int pageSize){
-    	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("knowledgekind", knowledgekind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-	      paramMap.put("best", best);
-	       paramMap.put("accepted", accepted);
-    	return session.selectList("boardMapper.searchKnowledgeList",paramMap);
+        Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("knowledgekind", knowledgekind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("best", best);
+          paramMap.put("accepted", accepted);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+    
+       return session.selectList("boardMapper.searchKnowledgeList",paramMap);
     };
     public List<Knowledge> searchKnowledgeList2(String knowledgekind, String keyword, String best, String accepted, int page, int pageSize){
-   	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("knowledgekind", knowledgekind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-	      paramMap.put("best", best);
-	       paramMap.put("accepted", accepted);
-   	return session.selectList("boardMapper.searchKnowledgeList2",paramMap);
+       Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("knowledgekind", knowledgekind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("best", best);
+          paramMap.put("accepted", accepted);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+      return session.selectList("boardMapper.searchKnowledgeList2",paramMap);
    };
    
    public List<Answer> searchKnowledgeList3(String knowledgekind, String keyword, int page, int pageSize){
-  	 Map<String, Object> paramMap = new HashMap<>();
-	        int start = (page - 1) * pageSize;
-	       paramMap.put("knowledgekind", knowledgekind);
-	       paramMap.put("keyword", keyword);
-	       paramMap.put("start", start);
-	      paramMap.put("pageSize", pageSize);
-  	return session.selectList("boardMapper.searchKnowledgeList3",paramMap);
+      Map<String, Object> paramMap = new HashMap<>();
+           int start = (page - 1) * pageSize;
+          paramMap.put("knowledgekind", knowledgekind);
+          paramMap.put("keyword", keyword);
+          paramMap.put("start", start);
+         paramMap.put("pageSize", pageSize);
+     return session.selectList("boardMapper.searchKnowledgeList3",paramMap);
   };
   
     
@@ -372,25 +377,25 @@ public class BoardDao {
     
     // 6-2. 지식인 답변 갯수
     public int selectKnowledgeAnswerCount(int postNo) {
-		return session.selectOne("boardMapper.selectKnowledgeAnswerCount", postNo);
-	}
+      return session.selectOne("boardMapper.selectKnowledgeAnswerCount", postNo);
+   }
     
     //6-3. 지식인 질문 등록
     public int insertKnowledgeQuestion(Board board) {
-    	int result = 0;
-    	int postNo = 0;
-    	result = session.insert("boardMapper.insertKnowledgeQuestion" , board);
-		
-		if(result > 0) {
-			postNo = board.getPostNo();
-			// 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
-			System.out.println(postNo);
-		}
-		
-		return postNo;
+       int result = 0;
+       int postNo = 0;
+       result = session.insert("boardMapper.insertKnowledgeQuestion" , board);
+      
+      if(result > 0) {
+         postNo = board.getPostNo();
+         // 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
+         System.out.println(postNo);
+      }
+      
+      return postNo;
     }
     public int insertKnowledgeQuestion2(Knowledge knowledge) {
-    	return session.insert("boardMapper.insertKnowledgeQuestion2" , knowledge);
+       return session.insert("boardMapper.insertKnowledgeQuestion2" , knowledge);
     }
 
     public int insertKnowledgeAttachment(List<Attachment> list) {
@@ -398,40 +403,40 @@ public class BoardDao {
     }
     //6-4. 지식인 답변 등록
     public int insertKnowledgeAnswer(Board board) {
-    	int result = 0;
-    	int postNo = 0;
-    	result = session.insert("boardMapper.insertKnowledgeAnswer" , board);
-		
-		if(result > 0) {
-			postNo = board.getPostNo();
-			// 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
-			System.out.println(postNo);
-		}
-		
-		return postNo;
+       int result = 0;
+       int postNo = 0;
+       result = session.insert("boardMapper.insertKnowledgeAnswer" , board);
+      
+      if(result > 0) {
+         postNo = board.getPostNo();
+         // 게시글 삽입 성공시 selectKey태그를 사용하여 셋팅한 boardNo값을 b에 담아줌.
+         System.out.println(postNo);
+      }
+      
+      return postNo;
     }
     public int insertKnowledgeAnswer2(Answer answer) {
-    	return session.insert("boardMapper.insertKnowledgeAnswer2" , answer);
+       return session.insert("boardMapper.insertKnowledgeAnswer2" , answer);
     }
     // 6-6. 지식인 질문 수정
     public int updateKnowledgeQuestion(Board b) {
-		return session.update("boardMapper.updateKnowledgeQuestion" , b);
-	}
+      return session.update("boardMapper.updateKnowledgeQuestion" , b);
+   }
     public int updateKnowledgeQuestion2(Knowledge k) {
-		return session.update("boardMapper.updateKnowledgeQuestion2" , k);
-	}
+      return session.update("boardMapper.updateKnowledgeQuestion2" , k);
+   }
     //6-8. 지식인 채택
     public int updateknowledgeAcceped(int postNo) {
-    	return session.update("boardMapper.updateknowledgeAcceped",postNo);
+       return session.update("boardMapper.updateknowledgeAcceped",postNo);
     };
     // 6-9. 지식인 추천수 증가
     public int increaseKnowledgeUpvotes(int postNo) {
-    	return session.update("boardMapper.increaseKnowledgeUpvotes",postNo);
+       return session.update("boardMapper.increaseKnowledgeUpvotes",postNo);
     }
     // 6-10. 지식인 답변 수정
     public int knowledgeAnswerUpdate(Board b) {
-		return session.update("boardMapper.knowledgeAnswerUpdate" , b);
-	}
+      return session.update("boardMapper.knowledgeAnswerUpdate" , b);
+   }
     
 
     //이찬우 구역 끝

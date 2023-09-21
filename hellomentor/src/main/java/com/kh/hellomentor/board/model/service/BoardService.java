@@ -15,7 +15,7 @@ public interface BoardService {
     List<Reply> getReplyByUserNo(int userNo);
 
 
-    //이찬우 구역 시작
+  //이찬우 구역 시작
     //0. 조회수 증가
     public int increaseCount(int postNo);
     
@@ -78,17 +78,17 @@ public interface BoardService {
     //5-4. 자유게시판 댓글 삽입
     public int insertFreeReply(Reply reply);
     
-	//5-5. 자유게시판 댓글 조회
-	public List<Reply> selectFreeReplyList(int postNo);
-	
-	//5-6. 자유게시판 댓글 삭제
+   //5-5. 자유게시판 댓글 조회
+   public List<Reply> selectFreeReplyList(int postNo);
+   
+   //5-6. 자유게시판 댓글 삭제
     public int deleteReply(int replyId);
     
     //5-7. 자유게시판 추천수 증가
     public int increaseUpvotes(int postNo);
     
     //5-8. 자유게시판 수정
-    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list, String FilesLocation, String webPath) throws Exception;
+    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list, String webPath, String FilesLocation) throws Exception;
     
     //6. 지식인 조회 (메인)
     public int selectKnowledgeCount();
@@ -117,7 +117,7 @@ public interface BoardService {
     public int insertKnowledgeAnswer2(Answer answer);
     
     //6-6. 지식인 질문 수정
-    public int updateKnowledgeQuestion(Board b, Knowledge k, List<MultipartFile> list, String wholePath, String webPath) throws Exception;
+    public int updateKnowledgeQuestion(Board b, Knowledge k,  List<String> deleteList, List<MultipartFile> list, String webPath, String FilesLocation ) throws Exception;
     
     //6-8. 지식인 채택
     public int updateknowledgeAcceped(int postNo);
@@ -127,9 +127,6 @@ public interface BoardService {
 
     //6-10. 지식인 답변 수정
     public int knowledgeAnswerUpdate(Board b) throws Exception;
-
-    
-    
 
 
 

@@ -89,949 +89,950 @@
 
 
 
-	<!-- 이찬우 구역 시작 -->
-	<!-- 0.조회수 증가 -->
-	<update id="increaseCount" parameterType="int">
-		UPDATE BOARD
-		SET VIEWS = VIEWS + 1
-		WHERE POST_NO = #{postNo}
-		AND IS_DELETE = FALSE
-	</update>
+	
+   <!-- 이찬우 구역 시작 -->
+   <!-- 0.조회수 증가 -->
+   <update id="increaseCount" parameterType="int">
+      UPDATE BOARD
+      SET VIEWS = VIEWS + 1
+      WHERE POST_NO = #{postNo}
+      AND IS_DELETE = FALSE
+   </update>
 
-	<!-- 0-1. 게시글 삭제 -->
-	<update id="deletePost" parameterType="int">
-		UPDATE BOARD
-		SET IS_DELETE = TRUE
-		WHERE POST_NO = #{postNo}
-	</update>
-
-
-	<!-- 1. 공지사항 게시글 조회 -->
-	<select id="selectNoticeCount" resultType="int">
-		SELECT COUNT(*)
-		FROM
-		BOARD
-		WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'N'
-	</select>
-	<select id="searchNoticeCount" parameterType="hashmap"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'N'
-		<choose>
-			<when test="ntkind == '6'">
-				AND I.CATEGORY_ID = 6
-			</when>
-			<when test="ntkind == '7'">
-				AND I.CATEGORY_ID = 7
-			</when>
-			<when test="ntkind == '8'">
-				AND I.CATEGORY_ID = 8
-			</when>
-			<when test="ntkind == '9'">
-				AND I.CATEGORY_ID = 9
-			</when>
-		</choose>
-		<choose>
-			<when test="keyword != null and keyword.length() > 0">
-				AND (
-				B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-				OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-				)
-			</when>
-		</choose>
-
-		ORDER BY B.POST_NO DESC
-	</select>
-	<select id="selectNoticeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.CREATE_DATE,
-		C.CATEGORY AS BOARD_TYPE
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'N'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="searchNoticeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.CREATE_DATE,
-		C.CATEGORY AS BOARD_TYPE
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'N'
-		<choose>
-			<when test="ntkind == '6'">
-				AND I.CATEGORY_ID = 6
-			</when>
-			<when test="ntkind == '7'">
-				AND I.CATEGORY_ID = 7
-			</when>
-			<when test="ntkind == '8'">
-				AND I.CATEGORY_ID = 8
-			</when>
-			<when test="ntkind == '9'">
-				AND I.CATEGORY_ID = 9
-			</when>
-		</choose>
-		<choose>
-			<when test="keyword != null and keyword.length() > 0">
-				AND (
-				B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-				OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-				)
-			</when>
-		</choose>
-
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-
-	<!-- 1-1. 공지사항 조회 (상세) -->
-	<select id="selectNoticeDetail" parameterType="int"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.POST_CONTENT,
-		B.CREATE_DATE,
-		C.CATEGORY AS BOARD_TYPE,
-		M.USER_ID AS USER_WRITER_NO,
-		VIEWS
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
+   <!-- 0-1. 게시글 삭제 -->
+   <update id="deletePost" parameterType="int">
+      UPDATE BOARD
+      SET IS_DELETE = TRUE
+      WHERE POST_NO = #{postNo}
+   </update>
 
 
+   <!-- 1. 공지사항 게시글 조회 -->
+   <select id="selectNoticeCount" resultType="int">
+      SELECT COUNT(*)
+      FROM
+      BOARD
+      WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'N'
+   </select>
+   <select id="searchNoticeCount" parameterType="hashmap"
+      resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'N'
+      <choose>
+         <when test="ntkind == '6'">
+            AND I.CATEGORY_ID = 6
+         </when>
+         <when test="ntkind == '7'">
+            AND I.CATEGORY_ID = 7
+         </when>
+         <when test="ntkind == '8'">
+            AND I.CATEGORY_ID = 8
+         </when>
+         <when test="ntkind == '9'">
+            AND I.CATEGORY_ID = 9
+         </when>
+      </choose>
+      <choose>
+         <when test="keyword != null and keyword.length() > 0">
+            AND (
+            B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+         </when>
+      </choose>
 
+      ORDER BY B.POST_NO DESC
+   </select>
+   <select id="selectNoticeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.CREATE_DATE,
+      C.CATEGORY AS BOARD_TYPE
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'N'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="searchNoticeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.CREATE_DATE,
+      C.CATEGORY AS BOARD_TYPE
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'N'
+      <choose>
+         <when test="ntkind == '6'">
+            AND I.CATEGORY_ID = 6
+         </when>
+         <when test="ntkind == '7'">
+            AND I.CATEGORY_ID = 7
+         </when>
+         <when test="ntkind == '8'">
+            AND I.CATEGORY_ID = 8
+         </when>
+         <when test="ntkind == '9'">
+            AND I.CATEGORY_ID = 9
+         </when>
+      </choose>
+      <choose>
+         <when test="keyword != null and keyword.length() > 0">
+            AND (
+            B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+         </when>
+      </choose>
+
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+
+   <!-- 1-1. 공지사항 조회 (상세) -->
+   <select id="selectNoticeDetail" parameterType="int"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.POST_CONTENT,
+      B.CREATE_DATE,
+      C.CATEGORY AS BOARD_TYPE,
+      M.USER_ID AS USER_WRITER_NO,
+      VIEWS
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
 
 
 
-	<!-- 2. FAQ 게시글 조회 -->
-	<select id="selectFaqCount" resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD
-		WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'Q'
-	</select>
-	<select id="searchFaqCount" parameterType="hashmap"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'Q'
-		<choose>
-			<when test="faqkind == '10'">
-				AND I.CATEGORY_ID = 10
-			</when>
-			<when test="faqkind == '11'">
-				AND I.CATEGORY_ID = 11
-			</when>
-			<when test="faqkind == '12'">
-				AND I.CATEGORY_ID = 12
-			</when>
-			<when test="faqkind == '13'">
-				AND I.CATEGORY_ID = 13
-			</when>
-		</choose>
-		<choose>
-			<when test="keyword != null and keyword.length() > 0">
-				AND (
-				B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-				OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-				)
-			</when>
-		</choose>
-		ORDER BY B.POST_NO DESC
-	</select>
-
-	<select id="selectFaqList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.POST_CONTENT,
-		C.CATEGORY AS BOARD_TYPE
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'Q'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="searchFaqList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		C.CATEGORY AS BOARD_TYPE,
-		B.POST_CONTENT
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'Q'
-		<choose>
-			<when test="faqkind == '10'">
-				AND I.CATEGORY_ID = 10
-			</when>
-			<when test="faqkind == '11'">
-				AND I.CATEGORY_ID = 11
-			</when>
-			<when test="faqkind == '12'">
-				AND I.CATEGORY_ID = 12
-			</when>
-			<when test="faqkind == '13'">
-				AND I.CATEGORY_ID = 13
-			</when>
-		</choose>
-		<choose>
-			<when test="keyword != null and keyword.length() > 0">
-				AND (
-				B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-				OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-				)
-			</when>
-		</choose>
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
 
 
-	<!-- 3. 1:1문의 insert -->
-	<insert id="insertInquiry" parameterType="board"
-		useGeneratedKeys="true" keyProperty="postNo">
-		INSERT INTO BOARD
-		(USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		IS_DELETE,
-		VIEWS,
-		CREATE_DATE,
-		BOARD_TYPE)
-		VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'A')
-	</insert>
-	<insert id="insertInquiry2" parameterType="inquiry">
-		INSERT INTO INQUIRY_BOARD
-		(POST_NO,
-		CATEGORY_ID,
-		IS_PROCESSED)
-		VALUES (#{postNo}, #{categoryId}, DEFAULT)
-	</insert>
-	<insert id="insertInquiryAttachment" parameterType="list">
-		INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
-		FILE_PATH)
-		VALUES
-		<foreach collection="list" item="attch" separator=",">
-			(
-			#{attch.postNo},
-			#{attch.originName},
-			#{attch.changeName},
-			#{attch.filePath}
-			)
-		</foreach>
-	</insert>
+
+   <!-- 2. FAQ 게시글 조회 -->
+   <select id="selectFaqCount" resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD
+      WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'Q'
+   </select>
+   <select id="searchFaqCount" parameterType="hashmap"
+      resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'Q'
+      <choose>
+         <when test="faqkind == '10'">
+            AND I.CATEGORY_ID = 10
+         </when>
+         <when test="faqkind == '11'">
+            AND I.CATEGORY_ID = 11
+         </when>
+         <when test="faqkind == '12'">
+            AND I.CATEGORY_ID = 12
+         </when>
+         <when test="faqkind == '13'">
+            AND I.CATEGORY_ID = 13
+         </when>
+      </choose>
+      <choose>
+         <when test="keyword != null and keyword.length() > 0">
+            AND (
+            B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+         </when>
+      </choose>
+      ORDER BY B.POST_NO DESC
+   </select>
+
+   <select id="selectFaqList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.POST_CONTENT,
+      C.CATEGORY AS BOARD_TYPE
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'Q'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="searchFaqList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      C.CATEGORY AS BOARD_TYPE,
+      B.POST_CONTENT
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'Q'
+      <choose>
+         <when test="faqkind == '10'">
+            AND I.CATEGORY_ID = 10
+         </when>
+         <when test="faqkind == '11'">
+            AND I.CATEGORY_ID = 11
+         </when>
+         <when test="faqkind == '12'">
+            AND I.CATEGORY_ID = 12
+         </when>
+         <when test="faqkind == '13'">
+            AND I.CATEGORY_ID = 13
+         </when>
+      </choose>
+      <choose>
+         <when test="keyword != null and keyword.length() > 0">
+            AND (
+            B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            OR B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+            )
+         </when>
+      </choose>
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
 
 
-	<!-- 4. 문의내역 조회 (메인) -->
-
-	<select id="selectInquiryCount" resultType="int">
-		SELECT COUNT(*)
-		FROM
-		BOARD
-		WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'A'
-	</select>
-
-	<select id="selectInquiryList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.CREATE_DATE,
-		C.CATEGORY AS BOARD_TYPE
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'A'
-		AND (USER_WRITER_NO = #{userNo} OR #{userNo} = 1)
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="selectInquiryList2" parameterType="hashmap"
-		resultMap="inquiryResultMap">
-		SELECT
-		IS_PROCESSED,
-		IQ_ANSWER
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'A'
-		AND (USER_WRITER_NO = #{userNo} OR #{userNo} = 1)
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-
-	<!-- 4-1. 문의내역 조회 (상세) -->
-	<select id="selectInquiryDetail" parameterType="int"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		B.POST_TITLE,
-		B.POST_CONTENT,
-		B.CREATE_DATE,
-		C.CATEGORY AS BOARD_TYPE
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
-		WHERE B.POST_NO = #{postNo}
-	</select>
-	<select id="selectInquiryDetail2" parameterType="int"
-		resultMap="inquiryResultMap">
-		SELECT
-		IS_PROCESSED,
-		IQ_ANSWER
-		FROM BOARD B
-		JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
-
-	<!-- 5. 자유게시판 조회 (메인) -->
-	<select id="selectFreeCount" resultType="int">
-		SELECT COUNT(*)
-		FROM
-		BOARD
-		WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'F'
-	</select>
-	<select id="searchFreeCount" parameterType="hashmap"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD B
-		JOIN MEMBER M ON USER_WRITER_NO = USER_NO
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		
-		<choose>
-			<when test="freekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		
-		<choose>
-		<when test="(views == null)">
-				ORDER BY B.POST_NO DESC
-			</when>
-			<when test="(views != null)">
-				ORDER BY B.VIEWS DESC
-			</when>
-		</choose>
-	</select>
-
-	<select id="selectFreeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO AS POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		CREATE_DATE,
-		VIEWS
-		FROM BOARD B
-		JOIN MEMBER M ON USER_WRITER_NO = USER_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="selectFreeList2" parameterType="hashmap"
-		resultMap="freeResultMap">
-		SELECT UPVOTES
-		FROM BOARD B
-		JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-
-	<select id="searchFreeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO AS POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		CREATE_DATE,
-		VIEWS
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		<choose>
-			<when test="freekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		<choose>
-		<when test="(views == null)">
-				ORDER BY B.POST_NO DESC
-			</when>
-			<when test="(views != null)">
-				ORDER BY B.VIEWS DESC
-			</when>
-		</choose>
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="searchFreeList2" parameterType="hashmap"
-		resultMap="freeResultMap">
-		SELECT UPVOTES
-		FROM BOARD B
-		JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		<choose>
-			<when test="freekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="freekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		<choose>
-		<when test="(views == null)">
-				ORDER BY B.POST_NO DESC
-			</when>
-			<when test="(views != null)">
-				ORDER BY B.VIEWS DESC
-			</when>
-		</choose>
-		LIMIT #{start}, #{pageSize}
-	</select>
-
-	<!-- 5-1.자유게시판 핫게시글 조회 -->
-	<select id="selectBestFreeList" resultMap="boardResultMap">
-		SELECT
-		ROW_NUMBER() OVER (ORDER BY F.UPVOTES DESC) AS ROWNUM,
-		B.POST_NO AS POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		CREATE_DATE,
-		VIEWS
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		AND ENROLL_DATE > DATE_SUB(NOW(), INTERVAL 20 DAY)
-		ORDER BY F.UPVOTES DESC
-		LIMIT 3;
-	</select>
-	<select id="selectBestFreeList2" resultMap="freeResultMap">
-		SELECT
-		ROW_NUMBER() OVER (ORDER BY F.UPVOTES DESC) AS ROWNUM,
-		UPVOTES
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'F'
-		AND ENROLL_DATE > DATE_SUB(NOW(), INTERVAL 20 DAY)
-		ORDER BY F.UPVOTES DESC
-		LIMIT 3;
-	</select>
-
-	<!-- 5-2. 자유게시판 조회 (상세) -->
-	<select id="selectFreeDetail" parameterType="int"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO AS POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		CREATE_DATE,
-		VIEWS
-		FROM BOARD B
-		JOIN MEMBER M ON USER_WRITER_NO = USER_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
-	<select id="selectFreeDetail2" parameterType="int"
-		resultMap="freeResultMap">
-		SELECT
-		F.POST_NO,
-		UPVOTES
-		FROM BOARD B
-		JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
-	<select id="selectAttachment" parameterType="int"
-		resultMap="attachmentResultMap">
-		SELECT
-		ATTACHMENT_ID,
-		FILE_ORIGIN_NAME,
-		FILE_CHANGE_NAME,
-		FILE_PATH
-		FROM ATTACHMENT
-		WHERE POST_NO = #{postNo}
-	</select>
-	<!-- 5-3. 자유게시판 insert -->
-	<insert id="insertFree" parameterType="board"
-		useGeneratedKeys="true" keyProperty="postNo">
-		INSERT INTO BOARD
-		(USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		IS_DELETE,
-		VIEWS,
-		CREATE_DATE,
-		BOARD_TYPE)
-		VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'F')
-	</insert>
-	<insert id="insertFree2" parameterType="int">
-		INSERT INTO FREE_BOARD
-		(POST_NO,
-		UPVOTES)
-		VALUES (#{postNo}, 0)
-	</insert>
-
-	<insert id="insertFreeAttachment" parameterType="list">
-		INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
-		FILE_PATH)
-		VALUES
-		<foreach collection="list" item="attch" separator=",">
-			(
-			#{attch.postNo},
-			#{attch.originName},
-			#{attch.changeName},
-			#{attch.filePath}
-			)
-		</foreach>
-	</insert>
-
-	<!-- 5-4. 댓글 insert -->
-	<insert id="insertFreeReply" parameterType="reply">
-		INSERT INTO REPLY
-		(POST_NO,
-		USER_NO,
-		REPLY_CONTENT,
-		IS_DELETE,
-		CREATE_AT)
-		VALUES (#{postNo}, #{userNo}, #{replyContent}, DEFAULT, DEFAULT)
-	</insert>
-	<!-- 5-5. 댓글 조회 -->
-	<select id="selectFreeReplyList" parameterType="int"
-		resultMap="replyResultMap1">
-		SELECT
-		REPLY_ID,
-		M.USER_ID AS USER_NO,
-		R.REPLY_CONTENT,
-		R.CREATE_AT
-		FROM REPLY R
-		LEFT JOIN MEMBER M ON R.USER_NO = M.USER_NO
-		WHERE R.POST_NO = #{postNo}
-		AND R.IS_DELETE = FALSE
-		ORDER BY R.REPLY_ID DESC
-	</select>
-	<!-- 5-6. 댓글 삭제 -->
-	<update id="deleteReply" parameterType="int">
-		UPDATE REPLY
-		SET IS_DELETE = TRUE
-		WHERE REPLY_ID = #{replyId}
-	</update>
-	<!-- 5-7. 자유게시판 추천 수 증가 -->
-	<update id="increaseUpvotes" parameterType="int">
-		UPDATE FREE_BOARD
-		SET UPVOTES = UPVOTES + 1
-		WHERE POST_NO = #{postNo}
-	</update>
-	<!-- 5-8. 자유게시판 수정 -->
-	<update id="updateFree" parameterType="board">
-		UPDATE BOARD SET
-		POST_TITLE = #{postTitle},
-		POST_CONTENT = #{postContent}
-		WHERE POST_NO =
-		#{postNo}
-	</update>
-
-	<insert id="insertAttachment" parameterType="attachment">
-		INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
-		FILE_PATH)
-		VALUES
-		( #{postNo},
-		#{originName},
-		#{changeName},
-		#{filePath}
-		)
-
-	</insert>
-		<delete id="deleteAttachment" parameterType="java.util.List">
-		    DELETE FROM ATTACHMENT
-		    WHERE ATTACHMENT_ID IN
-		    <foreach collection="list" item="delete" open="(" separator="," close=")">
-		        #{delete}
-		    </foreach>
-		</delete>
-	<!-- 6. 지식인 글 조회 (메인) -->
-	<select id="selectKnowledgeCount" resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD
-		WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'K'
-	</select>
-
-	<select id="searchKnowledgeCount" parameterType="hashmap"
-		resultType="int">
-		SELECT COUNT(DISTINCT B.POST_NO)
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
-		WHERE B.IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		<choose>
-			<when test="(best != null)">
-				AND K.UPVOTES >= 10
-			</when>
-		</choose>
-		<choose>
-			<when test="(accepted != null)">
-				AND A.IS_ACCEPTED = FALSE
-			</when>
-		</choose>
-		<choose>
-			<when test="knowledgekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		ORDER BY B.POST_NO DESC
-	</select>
-
-	<select id="selectKnowledgeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		CREATE_DATE,
-		VIEWS,
-		CASE
-		WHEN MAX(A.IS_ACCEPTED) = 1 THEN 1
-		ELSE 0
-		END AS BOARD_TYPE <!-- 채택 여부를 게시글당 하나, true값이 하나라도 있으면 1로 BOARD_TYPE에 담아줌 -->
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		GROUP BY B.POST_NO, M.USER_ID, POST_TITLE, POST_CONTENT, CREATE_DATE, VIEWS
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="selectKnowledgeList2" parameterType="hashmap"
-		resultMap="knowledgeResultMap">
-		SELECT
-		CATEGORY AS CATEGORY_ID,
-		UPVOTES
-		FROM BOARD B
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		JOIN CATEGORY C ON K.CATEGORY_ID = C.CATEGORY_ID
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="selectKnowledgeList3" parameterType="hashmap"
-		resultMap="answerResultMap">
-		SELECT A.IS_ACCEPTED
-		FROM BOARD B
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-
-	<select id="searchKnowledgeList" parameterType="hashmap"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		CREATE_DATE,
-		VIEWS,
-		CASE
-		WHEN MAX(A.IS_ACCEPTED) = 1 THEN 1
-		ELSE 0
-		END AS BOARD_TYPE
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		<choose>
-			<when test="(best != null)">
-				AND K.UPVOTES >= 10
-			</when>
-		</choose>
-		<choose>
-			<when test="(accepted != null)">
-				AND A.IS_ACCEPTED = FALSE
-			</when>
-		</choose>
-		<choose>
-			<when test="knowledgekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		GROUP BY B.POST_NO, M.USER_ID, POST_TITLE, POST_CONTENT, CREATE_DATE,
-		VIEWS
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
-	<select id="searchKnowledgeList2" parameterType="hashmap"
-		resultMap="knowledgeResultMap">
-		SELECT
-		B.POST_NO,
-		CATEGORY AS CATEGORY_ID,
-		UPVOTES
-		FROM BOARD B
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		JOIN CATEGORY C ON K.CATEGORY_ID = C.CATEGORY_ID
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
-		WHERE IS_DELETE = FALSE
-		AND B.BOARD_TYPE = 'K'
-		<choose>
-			<when test="(best != null)">
-				AND K.UPVOTES >= 10
-			</when>
-		</choose>
-		<choose>
-			<when test="(accepted != null)">
-				AND A.IS_ACCEPTED = FALSE
-			</when>
-		</choose>
-		<choose>
-			<when test="knowledgekind == 'userId'">
-				AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postTitle'">
-				AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-			<when test="knowledgekind == 'postContent'">
-				AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
-			</when>
-		</choose>
-		 GROUP  BY  B.POST_NO, CATEGORY, UPVOTES
-		ORDER BY B.POST_NO DESC
-		LIMIT #{start}, #{pageSize}
-	</select>
+   <!-- 3. 1:1문의 insert -->
+   <insert id="insertInquiry" parameterType="board"
+      useGeneratedKeys="true" keyProperty="postNo">
+      INSERT INTO BOARD
+      (USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      IS_DELETE,
+      VIEWS,
+      CREATE_DATE,
+      BOARD_TYPE)
+      VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'A')
+   </insert>
+   <insert id="insertInquiry2" parameterType="inquiry">
+      INSERT INTO INQUIRY_BOARD
+      (POST_NO,
+      CATEGORY_ID,
+      IS_PROCESSED)
+      VALUES (#{postNo}, #{categoryId}, DEFAULT)
+   </insert>
+   <insert id="insertInquiryAttachment" parameterType="list">
+      INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
+      FILE_PATH)
+      VALUES
+      <foreach collection="list" item="attch" separator=",">
+         (
+         #{attch.postNo},
+         #{attch.originName},
+         #{attch.changeName},
+         #{attch.filePath}
+         )
+      </foreach>
+   </insert>
 
 
-	<!-- 6-1.지식인 상세조회 -->
-	<select id="selectKnowledgeDetail" parameterType="int"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		CREATE_DATE,
-		VIEWS
-		FROM BOARD B
-		JOIN MEMBER M ON USER_WRITER_NO = USER_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
-	<select id="selectKnowledgeDetail2" parameterType="int"
-		resultMap="knowledgeResultMap">
-		SELECT CATEGORY_ID, UPVOTES
-		FROM BOARD B
-		JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
-		WHERE B.POST_NO = #{postNo}
-	</select>
-	<select id="selectKnowledgeDetailAnswer" parameterType="int"
-		resultMap="boardResultMap">
-		SELECT
-		B.POST_NO,
-		M.USER_ID AS USER_WRITER_NO,
-		B.CREATE_DATE,
-		A.IS_ACCEPTED AS BOARD_TYPE,
-		POST_CONTENT
-		FROM BOARD B
-		JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
-		JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
-		WHERE A.K_POST_NO = #{postNo}
-		AND B.IS_DELETE = FALSE
-		AND BOARD_TYPE = 'KA'
-		ORDER BY B.POST_NO DESC
-	</select>
-	<select id="selectKnowledgeAccepted" parameterType="int"
-		resultType="int">
-		SELECT
-		CASE
-		WHEN EXISTS (
-		SELECT 1
-		FROM BOARD B
-		JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
-		WHERE A.K_POST_NO = #{postNo}
-		AND B.IS_DELETE = FALSE
-		AND A.IS_ACCEPTED = 1
-		) THEN 1
-		ELSE 0
-		END AS IS_ACCEPTED
-	</select>
-	<!-- 6-2.지식인 답변개수 -->
-	<select id="selectKnowledgeAnswerCount" parameterType="int"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM BOARD B
-		JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
-		WHERE A.K_POST_NO = #{postNo}
-		AND B.IS_DELETE = FALSE
-		AND BOARD_TYPE = 'KA'
-	</select>
+   <!-- 4. 문의내역 조회 (메인) -->
 
-	<!-- 6-3.지식인 질문 등록 -->
-	<insert id="insertKnowledgeQuestion" parameterType="board"
-		useGeneratedKeys="true" keyProperty="postNo">
-		INSERT INTO BOARD
-		(USER_WRITER_NO,
-		POST_TITLE,
-		POST_CONTENT,
-		IS_DELETE,
-		VIEWS,
-		CREATE_DATE,
-		BOARD_TYPE)
-		VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'K')
-	</insert>
-	<insert id="insertKnowledgeQuestion2" parameterType="knowledge">
-		INSERT INTO KNOWLEDGE_BOARD
-		(POST_NO,
-		CATEGORY_ID,
-		UPVOTES)
-		VALUES (#{postNo}, #{categoryId}, 0)
-	</insert>
-	<insert id="insertKnowledgeAttachment" parameterType="list">
-		INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
-		FILE_PATH)
-		VALUES
-		<foreach collection="list" item="attch" separator=",">
-			(
-			#{attch.postNo},
-			#{attch.originName},
-			#{attch.changeName},
-			#{attch.filePath}
-			)
-		</foreach>
-	</insert>
+   <select id="selectInquiryCount" resultType="int">
+      SELECT COUNT(*)
+      FROM
+      BOARD
+      WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'A'
+   </select>
+
+   <select id="selectInquiryList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.CREATE_DATE,
+      C.CATEGORY AS BOARD_TYPE
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'A'
+      AND (USER_WRITER_NO = #{userNo} OR #{userNo} = 1)
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="selectInquiryList2" parameterType="hashmap"
+      resultMap="inquiryResultMap">
+      SELECT
+      IS_PROCESSED,
+      IQ_ANSWER
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'A'
+      AND (USER_WRITER_NO = #{userNo} OR #{userNo} = 1)
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+
+   <!-- 4-1. 문의내역 조회 (상세) -->
+   <select id="selectInquiryDetail" parameterType="int"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      B.POST_TITLE,
+      B.POST_CONTENT,
+      B.CREATE_DATE,
+      C.CATEGORY AS BOARD_TYPE
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      JOIN CATEGORY C ON I.CATEGORY_ID = C.CATEGORY_ID
+      WHERE B.POST_NO = #{postNo}
+   </select>
+   <select id="selectInquiryDetail2" parameterType="int"
+      resultMap="inquiryResultMap">
+      SELECT
+      IS_PROCESSED,
+      IQ_ANSWER
+      FROM BOARD B
+      JOIN INQUIRY_BOARD I ON B.POST_NO = I.POST_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
+
+   <!-- 5. 자유게시판 조회 (메인) -->
+   <select id="selectFreeCount" resultType="int">
+      SELECT COUNT(*)
+      FROM
+      BOARD
+      WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'F'
+   </select>
+   <select id="searchFreeCount" parameterType="hashmap"
+      resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD B
+      JOIN MEMBER M ON USER_WRITER_NO = USER_NO
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      
+      <choose>
+         <when test="freekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+      
+      <choose>
+      <when test="(views == null)">
+            ORDER BY B.POST_NO DESC
+         </when>
+         <when test="(views != null)">
+            ORDER BY B.VIEWS DESC
+         </when>
+      </choose>
+   </select>
+
+   <select id="selectFreeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO AS POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      CREATE_DATE,
+      VIEWS
+      FROM BOARD B
+      JOIN MEMBER M ON USER_WRITER_NO = USER_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="selectFreeList2" parameterType="hashmap"
+      resultMap="freeResultMap">
+      SELECT UPVOTES
+      FROM BOARD B
+      JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+
+   <select id="searchFreeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO AS POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      CREATE_DATE,
+      VIEWS
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      <choose>
+         <when test="freekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+      <choose>
+      <when test="(views == null)">
+            ORDER BY B.POST_NO DESC
+         </when>
+         <when test="(views != null)">
+            ORDER BY B.VIEWS DESC
+         </when>
+      </choose>
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="searchFreeList2" parameterType="hashmap"
+      resultMap="freeResultMap">
+      SELECT UPVOTES
+      FROM BOARD B
+      JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      <choose>
+         <when test="freekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="freekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+      <choose>
+      <when test="(views == null)">
+            ORDER BY B.POST_NO DESC
+         </when>
+         <when test="(views != null)">
+            ORDER BY B.VIEWS DESC
+         </when>
+      </choose>
+      LIMIT #{start}, #{pageSize}
+   </select>
+
+   <!-- 5-1.자유게시판 핫게시글 조회 -->
+   <select id="selectBestFreeList" resultMap="boardResultMap">
+      SELECT
+      ROW_NUMBER() OVER (ORDER BY F.UPVOTES DESC) AS ROWNUM,
+      B.POST_NO AS POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      CREATE_DATE,
+      VIEWS
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      AND ENROLL_DATE > DATE_SUB(NOW(), INTERVAL 20 DAY)
+      ORDER BY F.UPVOTES DESC
+      LIMIT 3;
+   </select>
+   <select id="selectBestFreeList2" resultMap="freeResultMap">
+      SELECT
+      ROW_NUMBER() OVER (ORDER BY F.UPVOTES DESC) AS ROWNUM,
+      UPVOTES
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'F'
+      AND ENROLL_DATE > DATE_SUB(NOW(), INTERVAL 20 DAY)
+      ORDER BY F.UPVOTES DESC
+      LIMIT 3;
+   </select>
+
+   <!-- 5-2. 자유게시판 조회 (상세) -->
+   <select id="selectFreeDetail" parameterType="int"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO AS POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      CREATE_DATE,
+      VIEWS
+      FROM BOARD B
+      JOIN MEMBER M ON USER_WRITER_NO = USER_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
+   <select id="selectFreeDetail2" parameterType="int"
+      resultMap="freeResultMap">
+      SELECT
+      F.POST_NO,
+      UPVOTES
+      FROM BOARD B
+      JOIN FREE_BOARD F ON B.POST_NO = F.POST_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
+   <select id="selectAttachment" parameterType="int"
+      resultMap="attachmentResultMap">
+      SELECT
+      ATTACHMENT_ID,
+      FILE_ORIGIN_NAME,
+      FILE_CHANGE_NAME,
+      FILE_PATH
+      FROM ATTACHMENT
+      WHERE POST_NO = #{postNo}
+   </select>
+   <!-- 5-3. 자유게시판 insert -->
+   <insert id="insertFree" parameterType="board"
+      useGeneratedKeys="true" keyProperty="postNo">
+      INSERT INTO BOARD
+      (USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      IS_DELETE,
+      VIEWS,
+      CREATE_DATE,
+      BOARD_TYPE)
+      VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'F')
+   </insert>
+   <insert id="insertFree2" parameterType="int">
+      INSERT INTO FREE_BOARD
+      (POST_NO,
+      UPVOTES)
+      VALUES (#{postNo}, 0)
+   </insert>
+
+   <insert id="insertFreeAttachment" parameterType="list">
+      INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
+      FILE_PATH)
+      VALUES
+      <foreach collection="list" item="attch" separator=",">
+         (
+         #{attch.postNo},
+         #{attch.originName},
+         #{attch.changeName},
+         #{attch.filePath}
+         )
+      </foreach>
+   </insert>
+
+   <!-- 5-4. 댓글 insert -->
+   <insert id="insertFreeReply" parameterType="reply">
+      INSERT INTO REPLY
+      (POST_NO,
+      USER_NO,
+      REPLY_CONTENT,
+      IS_DELETE,
+      CREATE_AT)
+      VALUES (#{postNo}, #{userNo}, #{replyContent}, DEFAULT, DEFAULT)
+   </insert>
+   <!-- 5-5. 댓글 조회 -->
+   <select id="selectFreeReplyList" parameterType="int"
+      resultMap="replyResultMap1">
+      SELECT
+      REPLY_ID,
+      M.USER_ID AS USER_NO,
+      R.REPLY_CONTENT,
+      R.CREATE_AT
+      FROM REPLY R
+      LEFT JOIN MEMBER M ON R.USER_NO = M.USER_NO
+      WHERE R.POST_NO = #{postNo}
+      AND R.IS_DELETE = FALSE
+      ORDER BY R.REPLY_ID DESC
+   </select>
+   <!-- 5-6. 댓글 삭제 -->
+   <update id="deleteReply" parameterType="int">
+      UPDATE REPLY
+      SET IS_DELETE = TRUE
+      WHERE REPLY_ID = #{replyId}
+   </update>
+   <!-- 5-7. 자유게시판 추천 수 증가 -->
+   <update id="increaseUpvotes" parameterType="int">
+      UPDATE FREE_BOARD
+      SET UPVOTES = UPVOTES + 1
+      WHERE POST_NO = #{postNo}
+   </update>
+   <!-- 5-8. 자유게시판 수정 -->
+   <update id="updateFree" parameterType="board">
+      UPDATE BOARD SET
+      POST_TITLE = #{postTitle},
+      POST_CONTENT = #{postContent}
+      WHERE POST_NO =
+      #{postNo}
+   </update>
+
+   <insert id="insertAttachment" parameterType="attachment">
+      INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
+      FILE_PATH)
+      VALUES
+      ( #{postNo},
+      #{originName},
+      #{changeName},
+      #{filePath}
+      )
+
+   </insert>
+      <delete id="deleteAttachment" parameterType="java.util.List">
+          DELETE FROM ATTACHMENT
+          WHERE ATTACHMENT_ID IN
+          <foreach collection="list" item="delete" open="(" separator="," close=")">
+              #{delete}
+          </foreach>
+      </delete>
+   <!-- 6. 지식인 글 조회 (메인) -->
+   <select id="selectKnowledgeCount" resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD
+      WHERE IS_DELETE = FALSE AND BOARD_TYPE = 'K'
+   </select>
+
+   <select id="searchKnowledgeCount" parameterType="hashmap"
+      resultType="int">
+      SELECT COUNT(DISTINCT B.POST_NO)
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
+      WHERE B.IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      <choose>
+         <when test="(best != null)">
+            AND K.UPVOTES >= 10
+         </when>
+      </choose>
+      <choose>
+         <when test="(accepted != null)">
+            AND A.IS_ACCEPTED = FALSE
+         </when>
+      </choose>
+      <choose>
+         <when test="knowledgekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+      ORDER BY B.POST_NO DESC
+   </select>
+
+   <select id="selectKnowledgeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      CREATE_DATE,
+      VIEWS,
+      CASE
+      WHEN MAX(A.IS_ACCEPTED) = 1 THEN 1
+      ELSE 0
+      END AS BOARD_TYPE <!-- 채택 여부를 게시글당 하나, true값이 하나라도 있으면 1로 BOARD_TYPE에 담아줌 -->
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      GROUP BY B.POST_NO, M.USER_ID, POST_TITLE, POST_CONTENT, CREATE_DATE, VIEWS
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="selectKnowledgeList2" parameterType="hashmap"
+      resultMap="knowledgeResultMap">
+      SELECT
+      CATEGORY AS CATEGORY_ID,
+      UPVOTES
+      FROM BOARD B
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      JOIN CATEGORY C ON K.CATEGORY_ID = C.CATEGORY_ID
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="selectKnowledgeList3" parameterType="hashmap"
+      resultMap="answerResultMap">
+      SELECT A.IS_ACCEPTED
+      FROM BOARD B
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+
+   <select id="searchKnowledgeList" parameterType="hashmap"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      CREATE_DATE,
+      VIEWS,
+      CASE
+      WHEN MAX(A.IS_ACCEPTED) = 1 THEN 1
+      ELSE 0
+      END AS BOARD_TYPE
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      <choose>
+         <when test="(best != null)">
+            AND K.UPVOTES >= 10
+         </when>
+      </choose>
+      <choose>
+         <when test="(accepted != null)">
+            AND A.IS_ACCEPTED = FALSE
+         </when>
+      </choose>
+      <choose>
+         <when test="knowledgekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+      GROUP BY B.POST_NO, M.USER_ID, POST_TITLE, POST_CONTENT, CREATE_DATE,
+      VIEWS
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
+   <select id="searchKnowledgeList2" parameterType="hashmap"
+      resultMap="knowledgeResultMap">
+      SELECT
+      B.POST_NO,
+      CATEGORY AS CATEGORY_ID,
+      UPVOTES
+      FROM BOARD B
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      JOIN CATEGORY C ON K.CATEGORY_ID = C.CATEGORY_ID
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      LEFT JOIN ANSWER_BOARD A ON K.POST_NO = A.K_POST_NO
+      WHERE IS_DELETE = FALSE
+      AND B.BOARD_TYPE = 'K'
+      <choose>
+         <when test="(best != null)">
+            AND K.UPVOTES >= 10
+         </when>
+      </choose>
+      <choose>
+         <when test="(accepted != null)">
+            AND A.IS_ACCEPTED = FALSE
+         </when>
+      </choose>
+      <choose>
+         <when test="knowledgekind == 'userId'">
+            AND M.USER_ID LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postTitle'">
+            AND B.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+         <when test="knowledgekind == 'postContent'">
+            AND B.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+         </when>
+      </choose>
+       GROUP  BY  B.POST_NO, CATEGORY, UPVOTES
+      ORDER BY B.POST_NO DESC
+      LIMIT #{start}, #{pageSize}
+   </select>
 
 
-	<!-- 6-4.지식인 답변 등록 -->
-	<insert id="insertKnowledgeAnswer" parameterType="board"
-		useGeneratedKeys="true" keyProperty="postNo">
-		INSERT INTO BOARD
-		(USER_WRITER_NO,
-		POST_CONTENT,
-		IS_DELETE,
-		VIEWS,
-		CREATE_DATE,
-		BOARD_TYPE)
-		VALUES (#{userNo}, #{postContent}, DEFAULT, 0, DEFAULT, 'KA')
-	</insert>
-	<insert id="insertKnowledgeAnswer2" parameterType="answer">
-		INSERT INTO ANSWER_BOARD
-		(POST_NO,
-		K_POST_NO,
-		IS_ACCEPTED)
-		VALUES (#{postNo}, #{knowledgePostNo}, 0)
-	</insert>
+   <!-- 6-1.지식인 상세조회 -->
+   <select id="selectKnowledgeDetail" parameterType="int"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      CREATE_DATE,
+      VIEWS
+      FROM BOARD B
+      JOIN MEMBER M ON USER_WRITER_NO = USER_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
+   <select id="selectKnowledgeDetail2" parameterType="int"
+      resultMap="knowledgeResultMap">
+      SELECT CATEGORY_ID, UPVOTES
+      FROM BOARD B
+      JOIN KNOWLEDGE_BOARD K ON B.POST_NO = K.POST_NO
+      WHERE B.POST_NO = #{postNo}
+   </select>
+   <select id="selectKnowledgeDetailAnswer" parameterType="int"
+      resultMap="boardResultMap">
+      SELECT
+      B.POST_NO,
+      M.USER_ID AS USER_WRITER_NO,
+      B.CREATE_DATE,
+      A.IS_ACCEPTED AS BOARD_TYPE,
+      POST_CONTENT
+      FROM BOARD B
+      JOIN MEMBER M ON B.USER_WRITER_NO = M.USER_NO
+      JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
+      WHERE A.K_POST_NO = #{postNo}
+      AND B.IS_DELETE = FALSE
+      AND BOARD_TYPE = 'KA'
+      ORDER BY B.POST_NO DESC
+   </select>
+   <select id="selectKnowledgeAccepted" parameterType="int"
+      resultType="int">
+      SELECT
+      CASE
+      WHEN EXISTS (
+      SELECT 1
+      FROM BOARD B
+      JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
+      WHERE A.K_POST_NO = #{postNo}
+      AND B.IS_DELETE = FALSE
+      AND A.IS_ACCEPTED = 1
+      ) THEN 1
+      ELSE 0
+      END AS IS_ACCEPTED
+   </select>
+   <!-- 6-2.지식인 답변개수 -->
+   <select id="selectKnowledgeAnswerCount" parameterType="int"
+      resultType="int">
+      SELECT COUNT(*)
+      FROM BOARD B
+      JOIN ANSWER_BOARD A ON B.POST_NO = A.POST_NO
+      WHERE A.K_POST_NO = #{postNo}
+      AND B.IS_DELETE = FALSE
+      AND BOARD_TYPE = 'KA'
+   </select>
 
-	<!-- 6-6. 지식인 질문 수정 -->
-	<update id="updateKnowledgeQuestion" parameterType="board">
-		UPDATE BOARD
-		SET
-		POST_TITLE = #{postTitle},
-		POST_CONTENT = #{postContent}
-		WHERE
-		POST_NO = #{postNo}
-	</update>
-	<update id="updateKnowledgeQuestion2" parameterType="knowledge">
-		UPDATE
-		KNOWLEDGE_BOARD SET
-		CATEGORY_ID = #{categoryId}
-		WHERE POST_NO =
-		#{postNo}
-	</update>
-
-	<!-- 6-8. 지식인 채택 -->
-	<update id="updateknowledgeAcceped" parameterType="int">
-		UPDATE ANSWER_BOARD
-		SET IS_ACCEPTED = TRUE
-		WHERE POST_NO = #{postNo}
-	</update>
-
-	<!-- 6-9. 지식인 추천 수 증가 -->
-	<update id="increaseKnowledgeUpvotes" parameterType="int">
-		UPDATE KNOWLEDGE_BOARD
-		SET UPVOTES = UPVOTES + 1
-		WHERE POST_NO = #{postNo}
-	</update>
-
-	<!-- 6-10. 지식인 답변 수정 -->
-	<update id="knowledgeAnswerUpdate" parameterType="board">
-		UPDATE BOARD
-		SET
-		POST_CONTENT = #{postContent}
-		WHERE POST_NO = #{postNo}
-	</update>
+   <!-- 6-3.지식인 질문 등록 -->
+   <insert id="insertKnowledgeQuestion" parameterType="board"
+      useGeneratedKeys="true" keyProperty="postNo">
+      INSERT INTO BOARD
+      (USER_WRITER_NO,
+      POST_TITLE,
+      POST_CONTENT,
+      IS_DELETE,
+      VIEWS,
+      CREATE_DATE,
+      BOARD_TYPE)
+      VALUES (#{userNo}, #{postTitle}, #{postContent}, DEFAULT, 0, DEFAULT, 'K')
+   </insert>
+   <insert id="insertKnowledgeQuestion2" parameterType="knowledge">
+      INSERT INTO KNOWLEDGE_BOARD
+      (POST_NO,
+      CATEGORY_ID,
+      UPVOTES)
+      VALUES (#{postNo}, #{categoryId}, 0)
+   </insert>
+   <insert id="insertKnowledgeAttachment" parameterType="list">
+      INSERT INTO ATTACHMENT(POST_NO, FILE_ORIGIN_NAME, FILE_CHANGE_NAME,
+      FILE_PATH)
+      VALUES
+      <foreach collection="list" item="attch" separator=",">
+         (
+         #{attch.postNo},
+         #{attch.originName},
+         #{attch.changeName},
+         #{attch.filePath}
+         )
+      </foreach>
+   </insert>
 
 
-	<!-- 이찬우 구역 끝 -->
+   <!-- 6-4.지식인 답변 등록 -->
+   <insert id="insertKnowledgeAnswer" parameterType="board"
+      useGeneratedKeys="true" keyProperty="postNo">
+      INSERT INTO BOARD
+      (USER_WRITER_NO,
+      POST_CONTENT,
+      IS_DELETE,
+      VIEWS,
+      CREATE_DATE,
+      BOARD_TYPE)
+      VALUES (#{userNo}, #{postContent}, DEFAULT, 0, DEFAULT, 'KA')
+   </insert>
+   <insert id="insertKnowledgeAnswer2" parameterType="answer">
+      INSERT INTO ANSWER_BOARD
+      (POST_NO,
+      K_POST_NO,
+      IS_ACCEPTED)
+      VALUES (#{postNo}, #{knowledgePostNo}, 0)
+   </insert>
+
+   <!-- 6-6. 지식인 질문 수정 -->
+   <update id="updateKnowledgeQuestion" parameterType="board">
+      UPDATE BOARD
+      SET
+      POST_TITLE = #{postTitle},
+      POST_CONTENT = #{postContent}
+      WHERE
+      POST_NO = #{postNo}
+   </update>
+   <update id="updateKnowledgeQuestion2" parameterType="knowledge">
+      UPDATE
+      KNOWLEDGE_BOARD SET
+      CATEGORY_ID = #{categoryId}
+      WHERE POST_NO =
+      #{postNo}
+   </update>
+
+   <!-- 6-8. 지식인 채택 -->
+   <update id="updateknowledgeAcceped" parameterType="int">
+      UPDATE ANSWER_BOARD
+      SET IS_ACCEPTED = TRUE
+      WHERE POST_NO = #{postNo}
+   </update>
+
+   <!-- 6-9. 지식인 추천 수 증가 -->
+   <update id="increaseKnowledgeUpvotes" parameterType="int">
+      UPDATE KNOWLEDGE_BOARD
+      SET UPVOTES = UPVOTES + 1
+      WHERE POST_NO = #{postNo}
+   </update>
+
+   <!-- 6-10. 지식인 답변 수정 -->
+   <update id="knowledgeAnswerUpdate" parameterType="board">
+      UPDATE BOARD
+      SET
+      POST_CONTENT = #{postContent}
+      WHERE POST_NO = #{postNo}
+   </update>
+
+
+   <!-- 이찬우 구역 끝 -->
 
 
 
