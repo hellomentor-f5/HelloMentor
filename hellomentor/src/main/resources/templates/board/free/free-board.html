@@ -32,6 +32,27 @@
       <div class="section">
         <h1 class="title">자유게시판</h1>
 
+
+<script>
+    $(document).ready(function () {
+        var currentIndex = 0;
+        var sliderItems = $("#slider ul li");
+
+        // 첫 번째 아이템 표시
+        sliderItems.eq(currentIndex).fadeIn();
+
+        // 다음 아이템 표시 함수
+        function showNextItem() {
+            sliderItems.eq(currentIndex).fadeOut();
+            currentIndex = (currentIndex + 1) % sliderItems.length;
+            sliderItems.eq(currentIndex).fadeIn();
+        }
+
+        // 일정 시간마다 다음 아이템 표시
+        setInterval(showNextItem, 5000); // 5초마다 전환
+    });
+</script>
+
  <!--    분류, 검색창 -->
         <form th:action="@{/freelist}" method="get">
           <div id="category-search">

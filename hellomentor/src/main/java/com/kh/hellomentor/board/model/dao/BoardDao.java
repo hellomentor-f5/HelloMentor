@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.hellomentor.member.controller.MemberController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class BoardDao {
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -50,7 +53,9 @@ public class BoardDao {
     	 Map<String, Object> paramMap = new HashMap<>();
   	   paramMap.put("ntkind", ntkind);
   	    paramMap.put("keyword", keyword);
+  	  log.info("ntkind {}", ntkind);
     	return session.selectOne("boardMapper.searchNoticeCount",paramMap);
+    	
     };
 
     public List<Board> selectNoticeList(int page, int pageSize){
@@ -70,7 +75,9 @@ public class BoardDao {
 	       paramMap.put("keyword", keyword);
 	       paramMap.put("start", start);
 	      paramMap.put("pageSize", pageSize);
+	      log.info("ntkind {}", ntkind);
     	return session.selectList("boardMapper.searchNoticeList",paramMap);
+    	
     };
 
     // 1-2. 공지사항 상세 조회
@@ -282,9 +289,6 @@ public class BoardDao {
     public int updateFree(Board b) {
 		return session.update("boardMapper.updateFree" , b);
 	}
-    public int updateAttachment(Attachment at) {
-		return session.update("boardMapper.updateAttachment", at);
-	}
     public int deleteAttachment(List<String> deleteList) {
 		return session.delete("boardMapper.deleteAttachment" , deleteList);
 	}
@@ -326,10 +330,11 @@ public class BoardDao {
 	        int start = (page - 1) * pageSize;
 	       paramMap.put("knowledgekind", knowledgekind);
 	       paramMap.put("keyword", keyword);
+	       paramMap.put("best", best);
+	       paramMap.put("accepted", accepted);
 	       paramMap.put("start", start);
 	      paramMap.put("pageSize", pageSize);
-	      paramMap.put("best", best);
-	       paramMap.put("accepted", accepted);
+	 
     	return session.selectList("boardMapper.searchKnowledgeList",paramMap);
     };
     public List<Knowledge> searchKnowledgeList2(String knowledgekind, String keyword, String best, String accepted, int page, int pageSize){
@@ -337,10 +342,10 @@ public class BoardDao {
 	        int start = (page - 1) * pageSize;
 	       paramMap.put("knowledgekind", knowledgekind);
 	       paramMap.put("keyword", keyword);
+	       paramMap.put("best", best);
+	       paramMap.put("accepted", accepted);
 	       paramMap.put("start", start);
 	      paramMap.put("pageSize", pageSize);
-	      paramMap.put("best", best);
-	       paramMap.put("accepted", accepted);
    	return session.selectList("boardMapper.searchKnowledgeList2",paramMap);
    };
    

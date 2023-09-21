@@ -72,9 +72,17 @@
             </tr>
 
             <tr>
-              <th>첨부파일</th>
+              <th  style="vertical-align: top;">첨부파일</th>
               <td>
-                <input type="file" id="knowledge-file" name="upfile" />
+                <div class="form-group" id="file-list">
+		        <a href="#this" onclick="addFile()" id="file-plus">파일추가</a>
+		        </div>
+		         <div th:each="attachList : ${attachList}">
+		          <a th:href="@{${attachList.filePath} + ${attachList.changeName}}" th:download="${attachList.originName}"> 
+				     <span th:text="${attachList.originName}"  id='uploaded-file'></span>
+				     </a>
+				     <a href='#this' name='file-delete' id='uploaded-delete' class="delete-image" th:attr="data-attachmentid=${attachList.attachmentId}"  onclick="deleteAttachment(this)">삭제</a>
+				</div>
               </td>
             </tr>
           </table>
@@ -94,7 +102,56 @@
       </div>
     </div>
     <div th:insert="common/footer :: footer"></div>
+     <script>
+    //var deletedAttachmentIds = [];
+
+    function deleteAttachment(ele) {
+        // 이미 삭제된 이미지인지 확인하고 배열에 추가
+        /* if (!deletedAttachmentIds.includes(attachmentId)) {
+            deletedAttachmentIds.push(attachmentId);
+        } */
+        const input = document.createElement("input");
+        input.setAttribute('type','hidden');
+        input.setAttribute('name','deletedAttachmentIds');
+        input.value = ele.dataset.attachmentid;
+        
+        const form = document.querySelector("#knowledge-write-form");
+        form.append(input);
+        
+        /* <input type="hidden" name="deletedAttachmentIds" th:value="${deletedAttachmentIds}">
+        // hidden input 엘리먼트를 사용하여 deletedAttachmentIds 값을 폼 데이터로 업데이트
+        var hiddenInput = document.querySelector('input[name="deletedAttachmentIds"]');
+        if (hiddenInput) {
+            hiddenInput.value = JSON.stringify(deletedAttachmentIds);
+        } */
+    }
+
+</script>
     
+    
+    
+     <script type="text/javascript">
+    $(document).ready(function() {
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    })
+ 
+    function addFile() {
+        var str = "<div class='file-group'><input type='file' id='free-file' name='upfile'><a href='#this' name='file-delete' id='file-delete'>삭제</a></div>";
+        $("#file-list").append(str);
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    }
+ 
+    function deleteFile(obj) {
+        obj.parent().remove();
+    }
+</script>
+
     <script th:inline="javascript">
 		    // 컨트롤러에서 전달된 메시지를 받아옵니다.
 		    var message = /*[[${message}]]*/ '';

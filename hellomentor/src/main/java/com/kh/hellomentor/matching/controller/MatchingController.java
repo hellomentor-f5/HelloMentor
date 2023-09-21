@@ -252,7 +252,6 @@ public class MatchingController {
         int mentorupdateToken = matchingService.mentorupdateToken(mentorToken);
 
 
-
         loginUser.setToken(updateToken);
         session.setAttribute("loginUser", loginUser);
 

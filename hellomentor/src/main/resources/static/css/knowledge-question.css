@@ -90,7 +90,6 @@
 /* 첨부파일 */
 #file-list{
 	margin-bottom: 15px;
-	transform:translate(20px,2px);
 }
 #file-plus {
     font-size: 17px;
@@ -119,6 +118,19 @@ input[type=file]::file-selector-button {
             font-weight: 1000;
             
         }
+
+#uploaded-file{
+	font-size: 15px;
+	color: rgb(95, 95, 95);
+    text-decoration: none;
+}
+#uploaded-delete {
+    font-size: 17px;
+    color: #48917A;
+    text-decoration: none;
+    margin-left : 10px;
+}
+
 
 
 

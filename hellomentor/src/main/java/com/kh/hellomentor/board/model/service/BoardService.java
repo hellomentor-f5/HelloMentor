@@ -88,7 +88,7 @@ public interface BoardService {
     public int increaseUpvotes(int postNo);
     
     //5-8. 자유게시판 수정
-    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list, String FilesLocation, String webPath) throws Exception;
+    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list, String webPath, String FilesLocation) throws Exception;
     
     //6. 지식인 조회 (메인)
     public int selectKnowledgeCount();
@@ -117,7 +117,7 @@ public interface BoardService {
     public int insertKnowledgeAnswer2(Answer answer);
     
     //6-6. 지식인 질문 수정
-    public int updateKnowledgeQuestion(Board b, Knowledge k, List<MultipartFile> list, String wholePath, String webPath) throws Exception;
+    public int updateKnowledgeQuestion(Board b, Knowledge k,  List<String> deleteList, List<MultipartFile> list, String webPath, String FilesLocation ) throws Exception;
     
     //6-8. 지식인 채택
     public int updateknowledgeAcceped(int postNo);

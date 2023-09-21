@@ -243,7 +243,7 @@ public class BoardServiceImpl implements BoardService {
     
     //5-8. 자유게시판 수정
     @Override
-    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list, String webPath , String FilesLocation) throws Exception{
+    public int updateFree(Board b, List<String> deleteList, List<MultipartFile> list , String webPath,String FilesLocation) throws Exception{
     	// 1) XSS, 개행문자 처리
 		b.setPostTitle(Utils.XSSHandling(b.getPostTitle()));
 		b.setPostContent(Utils.XSSHandling(b.getPostContent()));
@@ -405,7 +405,7 @@ if(result> 0) {
     
     //6-6. 지식인 질문 수정
     @Override
-    public int updateKnowledgeQuestion(Board b, Knowledge k, List<MultipartFile> list, String wholePath, String webPath) throws Exception{
+    public int updateKnowledgeQuestion(Board b, Knowledge k,  List<String> deleteList, List<MultipartFile> list, String webPath, String FilesLocation ) throws Exception{
     	// 1) XSS, 개행문자 처리
     	b.setPostTitle(Utils.XSSHandling(b.getPostTitle()));
     	b.setPostContent(Utils.XSSHandling(b.getPostContent()));
@@ -424,7 +424,7 @@ if(result> 0) {
     				if(!list.get(i).isEmpty()) {
     					
     					// 변경된 파일명 저장
-    					String changeName = Utils.saveFile(list.get(i), wholePath);
+    					String changeName = Utils.saveFile(list.get(i), FilesLocation);
     					
     					// Attachment객체를 생성해서 값을 추가한 후 attachList에 추가.
     					Attachment at = Attachment
@@ -439,21 +439,24 @@ if(result> 0) {
     			}
     		}
     		
-    		if(result > 0) {
-    			// Attachment객체 하나하나 업데이트
-    			for( Attachment at      :       attachList) {
-    				result = boardDao.updateAttachment(at);
-    				
-    				// result = 0 => 수정작업 실패 => 기존에 첨부파일이 등록 X
-    				// result = 1 => 수정작업 성공 => 기존에 첨부파일이 있었으니까 O
-    				
-    				//6) 결과값이 0인경우 -> update는 실패했찌만 , 실제 db에 올라간 첨부파일정보를 등록해야하기 때문에 insert문 실행
-    				if(result == 0) {
-    					result = boardDao.insertAttachment(at);
+    		// 4) x버튼을 눌렀을때 이미지를 db에서 삭제
+    					if(deleteList != null && !deleteList.isEmpty()) {
+    						result = boardDao.deleteAttachment(deleteList);
+    					}
+    					
+    					// 5) db에서 삭제에 성공했따면 or 게시판 업데이트에 성공했다면
+    					if(result > 0) {
+    						// Attachment객체 하나하나 업데이트
+    						for( Attachment attach      :       attachList) {
+    							
+    								result = boardDao.insertAttachment(attach);
+    							
+    							
+    						}
+    					}
+    					
+    					
     				}
-    			}
-    		}
-    	}
     	return result;
     }
     

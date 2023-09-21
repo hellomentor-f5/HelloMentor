@@ -1341,18 +1341,24 @@ public class BoardController {
 			@RequestParam(value = "upfile", required = false) List<MultipartFile> upfiles,
 			HttpSession session,
 			Model model,
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes,
+			@RequestParam(value = "deletedAttachmentIds", required = false) List<String> deleteList
 			) {
+    	log.info("deleteList {}", deleteList);
+    	log.info("upfiles {}", upfiles);
 		// 이미지, 파일을 저장할 저장경로 얻어오기
 		// /resources/images/board/{boardCode}/
     	String webPath = "/img/attachment/knowledge/";
-        String wholePath = "c:/hellomentor/hellomentor/src/main/resources/static"+webPath;
+        String currentDirectory = System.getProperty("user.dir");
+        String FilesLocation = currentDirectory + "/src/main/resources/static"+webPath;
 
+        Member loginUser = (Member) session.getAttribute("loginUser");
+		board.setUserNo(loginUser.getUserId() + "");
 
 		int result = 0;
 
 		try {
-			result = boardService.updateKnowledgeQuestion(board, knowledge, upfiles, webPath, wholePath);
+			result = boardService.updateKnowledgeQuestion(board, knowledge, deleteList, upfiles, webPath, FilesLocation);
 		} catch (Exception e) {
 			log.error("error = {}", e.getMessage());
 		}

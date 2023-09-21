@@ -59,8 +59,8 @@
 }
 
  .image-container {
-    max-width: 400px; /* 원하는 최대 너비(px) 설정 */
-    max-height: 400px; /* 원하는 최대 높이(px) 설정 */
+    max-width: 700px; /* 원하는 최대 너비(px) 설정 */
+    max-height: 700px; /* 원하는 최대 높이(px) 설정 */
     text-align: center; /* 이미지 중앙 정렬을 위한 설정 */
   }
 
